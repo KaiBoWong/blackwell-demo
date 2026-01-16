@@ -1,8 +1,11 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #3a53ba;
+  --foreground: #01f2f2;
+  --heading: #f2df79;
+  --accent: #f37406;
+  --deep-blue: #040dbf;
 }
 
 @theme inline {
@@ -14,13 +17,26 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #3a53ba;
+    --foreground: #01f2f2;
   }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-geist-sans), "Space Grotesk", "Inter", system-ui,
+    -apple-system, sans-serif;
+  letter-spacing: -0.01em;
+}
+
+.font-title {
+  font-family: "ATRotisSemiSans-ExtraBold", var(--font-geist-sans), "Inter",
+    system-ui, sans-serif;
+  letter-spacing: -0.02em;
+}
+
+.font-subtitle {
+  font-family: "ATRotisSemiSans-Light", var(--font-geist-sans), "Inter",
+    system-ui, sans-serif;
 }
