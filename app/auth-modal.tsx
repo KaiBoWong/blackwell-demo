@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { setUser, signIn, signUp } from "../store/user"
-import { showToast } from "../utils/toast"
+import { showToast } from "../components/toast"
 
 export type AuthMode = "login" | "signup"
 
@@ -153,13 +153,20 @@ export function AuthModal({
       if (mode === "signup") {
         const newUser = await handleSignUp()
         onAuthSuccess(
-          `Hi ${newUser.firstName || "User"} ${newUser.lastName || ""}, welcome to Blackwell, please verify your email immediately.`,
+          `Hi ${newUser.firstName || "User"} ${
+            newUser.lastName || ""
+          }, welcome to Blackwell, please verify your email immediately.`,
           newUser
         )
       } else {
         user = await handleLogin()
-        const fullName = `${user.firstName || "User"} ${user.lastName || ""}`.trim()
-        onAuthSuccess(`Login successful! Welcome to Blackwell, ${fullName}`, user)
+        const fullName = `${user.firstName || "User"} ${
+          user.lastName || ""
+        }`.trim()
+        onAuthSuccess(
+          `Login successful! Welcome to Blackwell, ${fullName}`,
+          user
+        )
       }
       onClose()
       setFormData({
@@ -185,9 +192,13 @@ export function AuthModal({
     setLoading(true)
     try {
       const userData = await handleSocialAuth(provider)
-      const fullName = `${userData.firstName || "User"} ${userData.lastName || ""}`.trim()
+      const fullName = `${userData.firstName || "User"} ${
+        userData.lastName || ""
+      }`.trim()
       onAuthSuccess(
-        `${provider === "google" ? "Google" : "Facebook"} login successful! Welcome, ${fullName}`,
+        `${
+          provider === "google" ? "Google" : "Facebook"
+        } login successful! Welcome, ${fullName}`,
         userData
       )
       onClose()
@@ -200,12 +211,16 @@ export function AuthModal({
 
   return (
     <div
-      className="fixed inset-0 z-[60] flex items-center justify-center bg-black/70 px-4 backdrop-blur-md"
+      className="fixed inset-0 z-[60] flex items-center justify-center bg-black/70 p-4 backdrop-blur-md"
       onClick={onClose}
     >
       <div
-        className="relative w-full max-w-md rounded-2xl bg-[#3A53BA] p-8 shadow-2xl ring-1 ring-[#f2df79]/20"
+        className="relative w-full max-w-md max-h-[95vh] overflow-y-auto rounded-2xl bg-[#3A53BA] p-6 sm:p-8 shadow-2xl ring-1 ring-[#f2df79]/20 scrollbar-hide"
         onClick={(e) => e.stopPropagation()}
+        style={{
+          scrollbarWidth: "none", // Firefox
+          msOverflowStyle: "none", // IE/Edge
+        }}
       >
         {/* Glowing effect */}
         <div className="absolute -inset-0.5 rounded-2xl bg-gradient-to-r from-[#F37406] via-[#f2df79] to-[#01f2f2] opacity-20 blur-xl"></div>
@@ -215,20 +230,20 @@ export function AuthModal({
             type="button"
             aria-label="Close"
             onClick={onClose}
-            className="absolute -right-4 -top-4 flex h-8 w-8 items-center justify-center rounded-full bg-[#040dbf] text-[#f2df79] ring-1 ring-[#f2df79]/30 transition hover:bg-[#F37406] hover:text-white"
+            className="absolute -right-2 -top-2 sm:-right-4 sm:-top-4 flex h-8 w-8 items-center justify-center rounded-full bg-[#040dbf] text-[#f2df79] ring-1 ring-[#f2df79]/30 transition hover:bg-[#F37406] hover:text-white z-10"
           >
             ×
           </button>
 
-          <div className="mb-8 text-center">
+          <div className="mb-6 sm:mb-8 text-center">
             <h2
-              className="mb-2 text-3xl font-bold text-[#f2df79]"
+              className="mb-2 text-2xl sm:text-3xl font-bold text-[#f2df79]"
               style={{ fontFamily: "ATRotisSemiSans-ExtraBold, sans-serif" }}
             >
               {mode === "signup" ? "Create Account" : "Welcome Back"}
             </h2>
             <p
-              className="text-sm text-[#01f2f2]"
+              className="text-xs sm:text-sm text-[#01f2f2]"
               style={{ fontFamily: "ATRotisSemiSans-Light, sans-serif" }}
             >
               {mode === "signup"
@@ -240,14 +255,14 @@ export function AuthModal({
           {/* Social Login Buttons - Only show in login mode */}
           {mode === "login" && (
             <>
-              <div className="mb-6 grid grid-cols-2 gap-3">
+              <div className="mb-6 grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <button
                   type="button"
                   onClick={() => handleSocialClick("google")}
                   disabled={loading}
-                  className="flex items-center justify-center gap-2 rounded-lg bg-white px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50"
+                  className="flex items-center justify-center gap-2 rounded-lg bg-white px-4 py-2.5 sm:py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50 active:scale-95"
                 >
-                  <svg className="h-5 w-5" viewBox="0 0 24 24">
+                  <svg className="h-5 w-5 flex-shrink-0" viewBox="0 0 24 24">
                     <path
                       fill="#4285F4"
                       d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
@@ -272,10 +287,10 @@ export function AuthModal({
                   type="button"
                   onClick={() => handleSocialClick("facebook")}
                   disabled={loading}
-                  className="flex items-center justify-center gap-2 rounded-lg bg-[#1877F2] px-4 py-3 text-sm font-medium text-white transition hover:bg-[#166FE5] disabled:cursor-not-allowed disabled:opacity-50"
+                  className="flex items-center justify-center gap-2 rounded-lg bg-[#1877F2] px-4 py-2.5 sm:py-3 text-sm font-medium text-white transition hover:bg-[#166FE5] disabled:cursor-not-allowed disabled:opacity-50 active:scale-95"
                 >
                   <svg
-                    className="h-5 w-5"
+                    className="h-5 w-5 flex-shrink-0"
                     fill="currentColor"
                     viewBox="0 0 24 24"
                   >
@@ -289,9 +304,9 @@ export function AuthModal({
                 <div className="absolute inset-0 flex items-center">
                   <div className="w-full border-t border-[#f2df79]/20"></div>
                 </div>
-                <div className="relative flex justify-center text-sm">
+                <div className="relative flex justify-center text-xs sm:text-sm">
                   <span
-                    className="bg-[#3A53BA] px-4 text-[#f2df79]"
+                    className="bg-[#3A53BA] px-3 sm:px-4 text-[#f2df79]"
                     style={{ fontFamily: "ATRotisSemiSans-Light, sans-serif" }}
                   >
                     Or continue with email
@@ -301,13 +316,13 @@ export function AuthModal({
             </>
           )}
 
-          <div className="space-y-4">
+          <div className="space-y-3 sm:space-y-4">
             {mode === "signup" && (
-              <div className="grid gap-4 sm:grid-cols-2">
+              <div className="grid gap-3 sm:gap-4 sm:grid-cols-2">
                 <div>
                   <label
                     htmlFor="signup-first-name"
-                    className="mb-1.5 block text-sm font-medium text-[#f2df79]"
+                    className="mb-1 sm:mb-1.5 block text-xs sm:text-sm font-medium text-[#f2df79]"
                   >
                     First Name
                   </label>
@@ -318,7 +333,7 @@ export function AuthModal({
                     onChange={(e) =>
                       setFormData({ ...formData, firstName: e.target.value })
                     }
-                    className="w-full rounded-lg border border-[#01f2f2]/30 bg-[#040dbf]/30 px-4 py-2.5 text-sm text-white placeholder-[#01f2f2]/50 outline-none transition focus:border-[#F37406] focus:ring-2 focus:ring-[#F37406]/20"
+                    className="w-full rounded-lg border border-[#01f2f2]/30 bg-[#040dbf]/30 px-3 sm:px-4 py-2 sm:py-2.5 text-sm text-white placeholder-[#01f2f2]/50 outline-none transition focus:border-[#F37406] focus:ring-2 focus:ring-[#F37406]/20"
                     placeholder="John"
                   />
                   {errors.firstName && (
@@ -330,7 +345,7 @@ export function AuthModal({
                 <div>
                   <label
                     htmlFor="signup-last-name"
-                    className="mb-1.5 block text-sm font-medium text-[#f2df79]"
+                    className="mb-1 sm:mb-1.5 block text-xs sm:text-sm font-medium text-[#f2df79]"
                   >
                     Last Name
                   </label>
@@ -341,7 +356,7 @@ export function AuthModal({
                     onChange={(e) =>
                       setFormData({ ...formData, lastName: e.target.value })
                     }
-                    className="w-full rounded-lg border border-[#01f2f2]/30 bg-[#040dbf]/30 px-4 py-2.5 text-sm text-white placeholder-[#01f2f2]/50 outline-none transition focus:border-[#F37406] focus:ring-2 focus:ring-[#F37406]/20"
+                    className="w-full rounded-lg border border-[#01f2f2]/30 bg-[#040dbf]/30 px-3 sm:px-4 py-2 sm:py-2.5 text-sm text-white placeholder-[#01f2f2]/50 outline-none transition focus:border-[#F37406] focus:ring-2 focus:ring-[#F37406]/20"
                     placeholder="Doe"
                   />
                   {errors.lastName && (
@@ -353,18 +368,19 @@ export function AuthModal({
                 <div>
                   <label
                     htmlFor="signup-mobile"
-                    className="mb-1.5 block text-sm font-medium text-[#f2df79]"
+                    className="mb-1 sm:mb-1.5 block text-xs sm:text-sm font-medium text-[#f2df79]"
                   >
                     Mobile
                   </label>
                   <input
                     id="signup-mobile"
                     name="mobile"
+                    type="tel"
                     value={formData.mobile}
                     onChange={(e) =>
                       setFormData({ ...formData, mobile: e.target.value })
                     }
-                    className="w-full rounded-lg border border-[#01f2f2]/30 bg-[#040dbf]/30 px-4 py-2.5 text-sm text-white placeholder-[#01f2f2]/50 outline-none transition focus:border-[#F37406] focus:ring-2 focus:ring-[#F37406]/20"
+                    className="w-full rounded-lg border border-[#01f2f2]/30 bg-[#040dbf]/30 px-3 sm:px-4 py-2 sm:py-2.5 text-sm text-white placeholder-[#01f2f2]/50 outline-none transition focus:border-[#F37406] focus:ring-2 focus:ring-[#F37406]/20"
                     placeholder="+1 (555) 000-0000"
                   />
                   {errors.mobile && (
@@ -374,7 +390,7 @@ export function AuthModal({
                 <div>
                   <label
                     htmlFor="signup-country"
-                    className="mb-1.5 block text-sm font-medium text-[#f2df79]"
+                    className="mb-1 sm:mb-1.5 block text-xs sm:text-sm font-medium text-[#f2df79]"
                   >
                     Country
                   </label>
@@ -385,7 +401,7 @@ export function AuthModal({
                     onChange={(e) =>
                       setFormData({ ...formData, country: e.target.value })
                     }
-                    className="w-full rounded-lg border border-[#01f2f2]/30 bg-[#040dbf]/30 px-4 py-2.5 text-sm text-white placeholder-[#01f2f2]/50 outline-none transition focus:border-[#F37406] focus:ring-2 focus:ring-[#F37406]/20"
+                    className="w-full rounded-lg border border-[#01f2f2]/30 bg-[#040dbf]/30 px-3 sm:px-4 py-2 sm:py-2.5 text-sm text-white placeholder-[#01f2f2]/50 outline-none transition focus:border-[#F37406] focus:ring-2 focus:ring-[#F37406]/20"
                     placeholder="United States"
                   />
                   {errors.country && (
@@ -400,7 +416,7 @@ export function AuthModal({
             <div>
               <label
                 htmlFor={`${mode}-email`}
-                className="mb-1.5 block text-sm font-medium text-[#f2df79]"
+                className="mb-1 sm:mb-1.5 block text-xs sm:text-sm font-medium text-[#f2df79]"
               >
                 Email
               </label>
@@ -408,11 +424,12 @@ export function AuthModal({
                 type="email"
                 id={`${mode}-email`}
                 name="email"
+                autoComplete="email"
                 value={formData.email}
                 onChange={(e) =>
                   setFormData({ ...formData, email: e.target.value })
                 }
-                className="w-full rounded-lg border border-[#01f2f2]/30 bg-[#040dbf]/30 px-4 py-2.5 text-sm text-white placeholder-[#01f2f2]/50 outline-none transition focus:border-[#F37406] focus:ring-2 focus:ring-[#F37406]/20"
+                className="w-full rounded-lg border border-[#01f2f2]/30 bg-[#040dbf]/30 px-3 sm:px-4 py-2 sm:py-2.5 text-sm text-white placeholder-[#01f2f2]/50 outline-none transition focus:border-[#F37406] focus:ring-2 focus:ring-[#F37406]/20"
                 placeholder="you@company.com"
               />
               {errors.email && (
@@ -423,7 +440,7 @@ export function AuthModal({
             <div>
               <label
                 htmlFor={`${mode}-password`}
-                className="mb-1.5 block text-sm font-medium text-[#f2df79]"
+                className="mb-1 sm:mb-1.5 block text-xs sm:text-sm font-medium text-[#f2df79]"
               >
                 Password
               </label>
@@ -431,11 +448,14 @@ export function AuthModal({
                 type="password"
                 id={`${mode}-password`}
                 name="password"
+                autoComplete={
+                  mode === "signup" ? "new-password" : "current-password"
+                }
                 value={formData.password}
                 onChange={(e) =>
                   setFormData({ ...formData, password: e.target.value })
                 }
-                className="w-full rounded-lg border border-[#01f2f2]/30 bg-[#040dbf]/30 px-4 py-2.5 text-sm text-white placeholder-[#01f2f2]/50 outline-none transition focus:border-[#F37406] focus:ring-2 focus:ring-[#F37406]/20"
+                className="w-full rounded-lg border border-[#01f2f2]/30 bg-[#040dbf]/30 px-3 sm:px-4 py-2 sm:py-2.5 text-sm text-white placeholder-[#01f2f2]/50 outline-none transition focus:border-[#F37406] focus:ring-2 focus:ring-[#F37406]/20"
                 placeholder="••••••••"
               />
               {errors.password && (
@@ -447,7 +467,7 @@ export function AuthModal({
               <div>
                 <label
                   htmlFor="signup-confirm-password"
-                  className="mb-1.5 block text-sm font-medium text-[#f2df79]"
+                  className="mb-1 sm:mb-1.5 block text-xs sm:text-sm font-medium text-[#f2df79]"
                 >
                   Confirm Password
                 </label>
@@ -455,6 +475,7 @@ export function AuthModal({
                   type="password"
                   id="signup-confirm-password"
                   name="confirmPassword"
+                  autoComplete="new-password"
                   value={formData.confirmPassword}
                   onChange={(e) =>
                     setFormData({
@@ -462,7 +483,7 @@ export function AuthModal({
                       confirmPassword: e.target.value,
                     })
                   }
-                  className="w-full rounded-lg border border-[#01f2f2]/30 bg-[#040dbf]/30 px-4 py-2.5 text-sm text-white placeholder-[#01f2f2]/50 outline-none transition focus:border-[#F37406] focus:ring-2 focus:ring-[#F37406]/20"
+                  className="w-full rounded-lg border border-[#01f2f2]/30 bg-[#040dbf]/30 px-3 sm:px-4 py-2 sm:py-2.5 text-sm text-white placeholder-[#01f2f2]/50 outline-none transition focus:border-[#F37406] focus:ring-2 focus:ring-[#F37406]/20"
                   placeholder="••••••••"
                 />
                 {errors.confirmPassword && (
@@ -477,7 +498,7 @@ export function AuthModal({
               type="button"
               onClick={handleSubmit}
               disabled={loading}
-              className="w-full rounded-lg bg-[#F37406] px-4 py-3 font-semibold text-white shadow-lg transition hover:bg-[#f2df79] hover:text-[#040dbf] hover:shadow-xl hover:shadow-[#F37406]/50 disabled:cursor-not-allowed disabled:opacity-50"
+              className="w-full rounded-lg bg-[#F37406] px-4 py-2.5 sm:py-3 font-semibold text-white shadow-lg transition hover:bg-[#f2df79] hover:text-[#040dbf] hover:shadow-xl hover:shadow-[#F37406]/50 disabled:cursor-not-allowed disabled:opacity-50 active:scale-95"
             >
               {loading
                 ? "Processing..."
@@ -487,14 +508,14 @@ export function AuthModal({
             </button>
           </div>
 
-          <p className="mt-6 text-center text-sm text-[#01f2f2]">
+          <p className="mt-4 sm:mt-6 text-center text-xs sm:text-sm text-[#01f2f2]">
             {mode === "signup"
               ? "Already have an account?"
               : "Don't have an account?"}{" "}
             <button
               type="button"
               onClick={onSwitchMode}
-              className="font-semibold text-[#f2df79] transition hover:text-[#F37406]"
+              className="font-semibold text-[#f2df79] transition hover:text-[#F37406] active:scale-95"
             >
               {mode === "signup" ? "Sign in" : "Sign up"}
             </button>

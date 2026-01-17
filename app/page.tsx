@@ -5,7 +5,9 @@ import Image from "next/image"
 import { useEffect, useRef, useState, useSyncExternalStore } from "react"
 import { clearUser, getUser, subscribe } from "../store/user"
 import { AuthModal, type AuthMode } from "./auth-modal"
-import { showToast } from "../utils/toast"
+import { showToast } from "../components/toast"
+import ContactForm from "@/components/ContactForm"
+import TradingTabs from "@/components/Trading"
 
 const palette = {
   background: "#3A53BA",
@@ -422,13 +424,16 @@ export default function Page() {
           }`}
         >
           <div className="space-y-4 px-4 pb-6 pt-4">
-            <a
-              href={ctaHref}
-              className="block rounded-xl bg-[#F37406] px-4 py-3 text-center text-sm font-bold uppercase tracking-wider text-white shadow-lg hover:bg-[#e56805] transition"
-              onClick={() => setMenuOpen(false)}
+            <button
+              type="button"
+              className="block w-full rounded-xl bg-[#F37406] px-4 py-3 text-center text-sm font-bold uppercase tracking-wider text-white shadow-lg transition hover:bg-[#e56805]"
+              onClick={() => {
+                openAuth("signup")
+                setMenuOpen(false)
+              }}
             >
               Register Now
-            </a>
+            </button>
             <button
               type="button"
               onClick={() => {
@@ -585,10 +590,7 @@ export default function Page() {
           </div>
         </section>
 
-        <section
-          id="features"
-          className="border-y border-[#f2df79]/25 bg-[#040dbf]/15 px-6 py-20"
-        >
+        <section id="features" className="px-6 py-20">
           <div className="mx-auto flex max-w-[1520px] flex-col gap-6 md:flex-row md:items-end md:justify-between">
             <div className="space-y-3">
               <p className="font-subtitle text-xs uppercase tracking-[0.28em] text-[#01f2f2]">
@@ -668,105 +670,35 @@ export default function Page() {
           </div>
         </section>
 
-        <section
-          id="pricing"
-          className="border-y border-[#f2df79]/25 bg-[#040dbf]/20 px-6 py-16"
-        >
+        <section id="pricing" className="px-6 py-16">
           <div className="mx-auto max-w-[1520px] py-16">
-            <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-              <div>
-                <p className="font-subtitle text-xs uppercase tracking-[0.28em] text-[#01f2f2]">
-                  Predictable pricing
-                </p>
-                <h2 className="font-title text-3xl font-semibold text-[#f2df79] sm:text-4xl">
-                  Scale without surprise fees.
-                </h2>
-              </div>
-              <p className="font-subtitle max-w-xl text-base text-[#01f2f2]">
-                Start with a pilot. When you are ready, move to a simple monthly
-                platform fee plus usage. No per-feature upcharges.
-              </p>
+            <div className="text-center mt-6 mb-14">
+              <h2 className="font-title text-3xl font-semibold text-[#01f2f2] sm:text-4xl">
+                Navigate Our App in 5 Clicks
+              </h2>
             </div>
 
-            <div className="mt-10 grid gap-6 lg:grid-cols-[1fr_0.9fr]">
-              <div className="rounded-3xl border border-[#f2df79]/30 bg-gradient-to-r from-[#f2df79]/15 via-[#F37406]/15 to-[#01f2f2]/15 p-8 shadow-2xl">
-                <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[#040dbf]">
-                  Pilot
-                </p>
-                <h3 className="mt-2 text-4xl font-semibold text-[#f2df79]">
-                  $0
-                  <span className="text-base font-medium text-[#01f2f2]">
-                    {" "}
-                    for 45 days
-                  </span>
-                </h3>
-                <p className="mt-3 text-sm text-[#01f2f2]">
-                  Everything you need to validate with your team and first
-                  customers.
-                </p>
-                <ul className="mt-6 space-y-3 text-sm text-[#f2df79]">
-                  <li className="flex items-start gap-2">
-                    <span className="mt-1 h-1.5 w-1.5 rounded-full bg-[#F37406]" />
-                    Full feature access, including risk engine
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="mt-1 h-1.5 w-1.5 rounded-full bg-[#F37406]" />
-                    Up to 15k monthly active users
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="mt-1 h-1.5 w-1.5 rounded-full bg-[#F37406]" />
-                    Slack + email support with a response SLA
-                  </li>
-                </ul>
-                <a
-                  href={ctaHref}
-                  className="mt-8 inline-flex items-center justify-center rounded-full bg-[#f2df79] px-5 py-3 text-sm font-semibold text-[#040dbf] transition hover:-translate-y-0.5"
-                >
-                  Reserve a pilot slot
-                </a>
+            <TradingTabs />
+
+            <div className="flex justify-center gap-3 mt-10">
+              <div className="h-12 flex items-center overflow-hidden">
+                <Image
+                  src="/playstore/google-play.jpg"
+                  alt="Google Play"
+                  width={393}
+                  height={118}
+                  className="h-full w-auto object-contain rounded-xl"
+                />
               </div>
 
-              <div className="rounded-3xl border border-[#f2df79]/25 bg-[#040dbf]/30 p-8">
-                <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[#01f2f2]">
-                  For scale
-                </p>
-                <h3 className="mt-2 text-3xl font-semibold text-[#f2df79]">
-                  Custom plans for enterprise teams.
-                </h3>
-                <p className="mt-3 text-sm text-[#01f2f2]">
-                  Usage-based with committed discounts. Includes white-glove
-                  onboarding, migration support, and 24/7 response.
-                </p>
-                <div className="mt-6 grid grid-cols-1 gap-3 text-sm text-[#f2df79] sm:grid-cols-2">
-                  {[
-                    "Dedicated tenant isolation",
-                    "Private SSO domains",
-                    "Advanced auditing",
-                    "Regional routing",
-                  ].map((item) => (
-                    <div
-                      key={item}
-                      className="flex items-center gap-2 rounded-2xl border border-[#f2df79]/20 bg-[#01f2f2]/10 px-4 py-3"
-                    >
-                      <span className="h-2 w-2 rounded-full bg-[#F37406]" />
-                      <p>{item}</p>
-                    </div>
-                  ))}
-                </div>
-                <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
-                  <a
-                    href="#contact"
-                    className="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[#f2df79] via-[#F37406] to-[#01f2f2] px-6 py-3 text-sm font-semibold text-[#040dbf] shadow-[0_12px_40px_-20px_rgba(243,116,6,0.65)] transition hover:-translate-y-0.5"
-                  >
-                    Talk to us
-                  </a>
-                  <a
-                    href="mailto:team@blackwell.dev"
-                    className="text-sm font-semibold text-[#01f2f2] transition hover:text-[#F37406]"
-                  >
-                    Email sales ↗
-                  </a>
-                </div>
+              <div className="h-12 flex items-center overflow-hidden">
+                <Image
+                  src="/playstore/app-store.jpg"
+                  alt="App Store"
+                  width={393}
+                  height={118}
+                  className="h-full w-auto object-contain rounded-xl"
+                />
               </div>
             </div>
           </div>
@@ -774,39 +706,13 @@ export default function Page() {
 
         <section
           id="contact"
-          className="mx-auto max-w-[1520px] px-6 py-16 lg:py-20"
+          className="relative w-screen bg-cover bg-top bg-no-repeat"
+          style={{
+            backgroundImage: "url(/background/bg-3.png)",
+          }}
         >
-          <div className="rounded-3xl border border-[#f2df79]/25 bg-gradient-to-r from-[#f2df79]/20 via-[#F37406]/18 to-[#01f2f2]/18 px-8 py-12 shadow-2xl backdrop-blur">
-            <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
-              <div className="space-y-3">
-                <p className="font-subtitle text-xs uppercase tracking-[0.28em] text-[#01f2f2]">
-                  Ready when you are
-                </p>
-                <h2 className="font-title text-3xl font-semibold text-[#f2df79] sm:text-4xl">
-                  Register now and ship your best login yet.
-                </h2>
-                <p className="font-subtitle max-w-xl text-base text-[#01f2f2]">
-                  Tell us about your stack and target launch date. We will set
-                  up a tailored pilot environment and migrate you with zero
-                  downtime.
-                </p>
-              </div>
-              <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-                <a
-                  href="mailto:team@blackwell.dev"
-                  className="inline-flex items-center justify-center gap-2 rounded-full bg-[#f2df79] px-6 py-3 text-base font-semibold text-[#040dbf] transition hover:-translate-y-0.5"
-                >
-                  Email the team
-                </a>
-                <a
-                  href="#features"
-                  className="inline-flex items-center justify-center gap-2 rounded-full border border-[#f2df79]/30 px-6 py-3 text-base font-semibold text-[#f2df79] transition hover:border-[#F37406] hover:bg-[#F37406]/15"
-                >
-                  View capabilities
-                </a>
-              </div>
-            </div>
-          </div>
+          {/* 内容容器 */}
+          <ContactForm />
         </section>
       </main>
 
