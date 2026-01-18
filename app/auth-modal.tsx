@@ -1,22 +1,18 @@
 "use client"
 
 import { useState } from "react"
+import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import {
+  signupSchema,
+  loginSchema,
+  type SignupFormData,
+  type LoginFormData,
+} from "../schemas/auth.schema"
 import { setUser, signIn, signUp } from "../store/user"
 import { showToast } from "../components/toast"
 
 export type AuthMode = "login" | "signup"
-
-type AuthFormData = {
-  firstName: string
-  lastName: string
-  email: string
-  mobile: string
-  country: string
-  password: string
-  confirmPassword: string
-}
-
-type AuthErrors = Partial<Record<keyof AuthFormData, string>>
 
 type Props = {
   isOpen: boolean
@@ -49,83 +45,46 @@ export function AuthModal({
   onSwitchMode,
   onAuthSuccess,
 }: Props) {
-  const [formData, setFormData] = useState<AuthFormData>({
-    firstName: "",
-    lastName: "",
-    email: "",
-    mobile: "",
-    country: "",
-    password: "",
-    confirmPassword: "",
+  const isSignup = mode === "signup"
+
+  const {
+    register: signupRegister,
+    handleSubmit: handleSignupSubmit,
+    formState: { errors: signupErrors, isSubmitting: isSignupSubmitting },
+    reset: resetSignup,
+  } = useForm<SignupFormData>({
+    resolver: zodResolver(signupSchema),
+    mode: "onChange",
+    defaultValues: {
+      firstName: "",
+      lastName: "",
+      email: "",
+      mobile: "",
+      country: "",
+      password: "",
+      confirmPassword: "",
+    },
   })
-  const [errors, setErrors] = useState<AuthErrors>({})
+
+  const {
+    register: loginRegister,
+    handleSubmit: handleLoginSubmit,
+    formState: { errors: loginErrors, isSubmitting: isLoginSubmitting },
+    reset: resetLogin,
+  } = useForm<LoginFormData>({
+    resolver: zodResolver(loginSchema),
+    mode: "onChange",
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  })
+
   const [loading, setLoading] = useState(false)
 
   if (!isOpen) return null
-
-  const validateSignUp = (): AuthErrors => {
-    const newErrors: AuthErrors = {}
-    if (!formData.firstName.trim())
-      newErrors.firstName = "First name is required"
-    if (!formData.lastName.trim()) newErrors.lastName = "Last name is required"
-    if (!formData.email.trim()) newErrors.email = "Email is required"
-    else if (!/\S+@\S+\.\S+/.test(formData.email))
-      newErrors.email = "Email is invalid"
-    if (!formData.mobile.trim()) newErrors.mobile = "Mobile is required"
-    if (!formData.country.trim()) newErrors.country = "Country is required"
-    if (!formData.password) newErrors.password = "Password is required"
-    else if (formData.password.length < 8)
-      newErrors.password = "Password must be at least 8 characters"
-    if (formData.password !== formData.confirmPassword)
-      newErrors.confirmPassword = "Passwords do not match"
-    return newErrors
-  }
-
-  const validateLogin = (): AuthErrors => {
-    const newErrors: AuthErrors = {}
-    if (!formData.email.trim()) newErrors.email = "Email is required"
-    if (!formData.password) newErrors.password = "Password is required"
-    return newErrors
-  }
-
-  const handleSignUp = (): Promise<User> => {
-    return new Promise(async (resolve, reject) => {
-      const validationErrors = validateSignUp()
-      if (Object.keys(validationErrors).length > 0) {
-        setErrors(validationErrors)
-        reject(new Error("Validation failed"))
-        return
-      }
-
-      try {
-        const userData = await signUp(formData)
-        resolve(userData)
-      } catch (error) {
-        reject(error)
-      }
-    })
-  }
-
-  const handleLogin = (): Promise<User> => {
-    return new Promise(async (resolve, reject) => {
-      const validationErrors = validateLogin()
-      if (Object.keys(validationErrors).length > 0) {
-        setErrors(validationErrors)
-        reject(new Error("Validation failed"))
-        return
-      }
-
-      try {
-        const userData = await signIn({
-          email: formData.email,
-          password: formData.password,
-        })
-        resolve(userData)
-      } catch (error) {
-        reject(error)
-      }
-    })
-  }
+  const isSubmitting = isSignup ? isSignupSubmitting : isLoginSubmitting
+  const isBusy = loading || isSubmitting
 
   const handleSocialAuth = (provider: "google" | "facebook"): Promise<User> => {
     return new Promise<User>((resolve) => {
@@ -144,22 +103,20 @@ export function AuthModal({
     })
   }
 
-  const handleSubmit = async () => {
-    setErrors({})
+  const handleSubmit = async (data: SignupFormData | LoginFormData) => {
     setLoading(true)
-
     try {
-      let user
       if (mode === "signup") {
-        const newUser = await handleSignUp()
+        const newUser = await signUp(data as SignupFormData)
         onAuthSuccess(
           `Hi ${newUser.firstName || "User"} ${
             newUser.lastName || ""
           }, welcome to Blackwell, please verify your email immediately.`,
           newUser
         )
+        resetSignup()
       } else {
-        user = await handleLogin()
+        const user = await signIn(data as LoginFormData)
         const fullName = `${user.firstName || "User"} ${
           user.lastName || ""
         }`.trim()
@@ -167,17 +124,9 @@ export function AuthModal({
           `Login successful! Welcome to Blackwell, ${fullName}`,
           user
         )
+        resetLogin()
       }
       onClose()
-      setFormData({
-        firstName: "",
-        lastName: "",
-        email: "",
-        mobile: "",
-        country: "",
-        password: "",
-        confirmPassword: "",
-      })
     } catch (error) {
       console.error("Auth error:", error)
       showToast.error(
@@ -316,7 +265,14 @@ export function AuthModal({
             </>
           )}
 
-          <div className="space-y-3 sm:space-y-4">
+          <form
+            onSubmit={
+              isSignup
+                ? handleSignupSubmit(handleSubmit)
+                : handleLoginSubmit(handleSubmit)
+            }
+            className="space-y-3 sm:space-y-4"
+          >
             {mode === "signup" && (
               <div className="grid gap-3 sm:gap-4 sm:grid-cols-2">
                 <div>
@@ -328,17 +284,13 @@ export function AuthModal({
                   </label>
                   <input
                     id="signup-first-name"
-                    name="firstName"
-                    value={formData.firstName}
-                    onChange={(e) =>
-                      setFormData({ ...formData, firstName: e.target.value })
-                    }
+                    {...signupRegister("firstName")}
                     className="w-full rounded-lg border border-[#01f2f2]/30 bg-[#040dbf]/30 px-3 sm:px-4 py-2 sm:py-2.5 text-sm text-white placeholder-[#01f2f2]/50 outline-none transition focus:border-[#F37406] focus:ring-2 focus:ring-[#F37406]/20"
                     placeholder="John"
                   />
-                  {errors.firstName && (
+                  {signupErrors.firstName && (
                     <p className="mt-1 text-xs text-red-400">
-                      {errors.firstName}
+                      {signupErrors.firstName.message}
                     </p>
                   )}
                 </div>
@@ -351,17 +303,13 @@ export function AuthModal({
                   </label>
                   <input
                     id="signup-last-name"
-                    name="lastName"
-                    value={formData.lastName}
-                    onChange={(e) =>
-                      setFormData({ ...formData, lastName: e.target.value })
-                    }
+                    {...signupRegister("lastName")}
                     className="w-full rounded-lg border border-[#01f2f2]/30 bg-[#040dbf]/30 px-3 sm:px-4 py-2 sm:py-2.5 text-sm text-white placeholder-[#01f2f2]/50 outline-none transition focus:border-[#F37406] focus:ring-2 focus:ring-[#F37406]/20"
                     placeholder="Doe"
                   />
-                  {errors.lastName && (
+                  {signupErrors.lastName && (
                     <p className="mt-1 text-xs text-red-400">
-                      {errors.lastName}
+                      {signupErrors.lastName.message}
                     </p>
                   )}
                 </div>
@@ -374,17 +322,15 @@ export function AuthModal({
                   </label>
                   <input
                     id="signup-mobile"
-                    name="mobile"
                     type="tel"
-                    value={formData.mobile}
-                    onChange={(e) =>
-                      setFormData({ ...formData, mobile: e.target.value })
-                    }
+                    {...signupRegister("mobile")}
                     className="w-full rounded-lg border border-[#01f2f2]/30 bg-[#040dbf]/30 px-3 sm:px-4 py-2 sm:py-2.5 text-sm text-white placeholder-[#01f2f2]/50 outline-none transition focus:border-[#F37406] focus:ring-2 focus:ring-[#F37406]/20"
                     placeholder="+1 (555) 000-0000"
                   />
-                  {errors.mobile && (
-                    <p className="mt-1 text-xs text-red-400">{errors.mobile}</p>
+                  {signupErrors.mobile && (
+                    <p className="mt-1 text-xs text-red-400">
+                      {signupErrors.mobile.message}
+                    </p>
                   )}
                 </div>
                 <div>
@@ -396,17 +342,13 @@ export function AuthModal({
                   </label>
                   <input
                     id="signup-country"
-                    name="country"
-                    value={formData.country}
-                    onChange={(e) =>
-                      setFormData({ ...formData, country: e.target.value })
-                    }
+                    {...signupRegister("country")}
                     className="w-full rounded-lg border border-[#01f2f2]/30 bg-[#040dbf]/30 px-3 sm:px-4 py-2 sm:py-2.5 text-sm text-white placeholder-[#01f2f2]/50 outline-none transition focus:border-[#F37406] focus:ring-2 focus:ring-[#F37406]/20"
                     placeholder="United States"
                   />
-                  {errors.country && (
+                  {signupErrors.country && (
                     <p className="mt-1 text-xs text-red-400">
-                      {errors.country}
+                      {signupErrors.country.message}
                     </p>
                   )}
                 </div>
@@ -423,17 +365,19 @@ export function AuthModal({
               <input
                 type="email"
                 id={`${mode}-email`}
-                name="email"
                 autoComplete="email"
-                value={formData.email}
-                onChange={(e) =>
-                  setFormData({ ...formData, email: e.target.value })
-                }
+                {...(isSignup
+                  ? signupRegister("email")
+                  : loginRegister("email"))}
                 className="w-full rounded-lg border border-[#01f2f2]/30 bg-[#040dbf]/30 px-3 sm:px-4 py-2 sm:py-2.5 text-sm text-white placeholder-[#01f2f2]/50 outline-none transition focus:border-[#F37406] focus:ring-2 focus:ring-[#F37406]/20"
                 placeholder="you@company.com"
               />
-              {errors.email && (
-                <p className="mt-1 text-xs text-red-400">{errors.email}</p>
+              {(isSignup ? signupErrors.email : loginErrors.email) && (
+                <p className="mt-1 text-xs text-red-400">
+                  {(
+                    isSignup ? signupErrors.email : loginErrors.email
+                  )?.message}
+                </p>
               )}
             </div>
 
@@ -447,19 +391,21 @@ export function AuthModal({
               <input
                 type="password"
                 id={`${mode}-password`}
-                name="password"
                 autoComplete={
                   mode === "signup" ? "new-password" : "current-password"
                 }
-                value={formData.password}
-                onChange={(e) =>
-                  setFormData({ ...formData, password: e.target.value })
-                }
+                {...(isSignup
+                  ? signupRegister("password")
+                  : loginRegister("password"))}
                 className="w-full rounded-lg border border-[#01f2f2]/30 bg-[#040dbf]/30 px-3 sm:px-4 py-2 sm:py-2.5 text-sm text-white placeholder-[#01f2f2]/50 outline-none transition focus:border-[#F37406] focus:ring-2 focus:ring-[#F37406]/20"
                 placeholder="••••••••"
               />
-              {errors.password && (
-                <p className="mt-1 text-xs text-red-400">{errors.password}</p>
+              {(isSignup ? signupErrors.password : loginErrors.password) && (
+                <p className="mt-1 text-xs text-red-400">
+                  {(
+                    isSignup ? signupErrors.password : loginErrors.password
+                  )?.message}
+                </p>
               )}
             </div>
 
@@ -474,39 +420,31 @@ export function AuthModal({
                 <input
                   type="password"
                   id="signup-confirm-password"
-                  name="confirmPassword"
                   autoComplete="new-password"
-                  value={formData.confirmPassword}
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      confirmPassword: e.target.value,
-                    })
-                  }
+                  {...signupRegister("confirmPassword")}
                   className="w-full rounded-lg border border-[#01f2f2]/30 bg-[#040dbf]/30 px-3 sm:px-4 py-2 sm:py-2.5 text-sm text-white placeholder-[#01f2f2]/50 outline-none transition focus:border-[#F37406] focus:ring-2 focus:ring-[#F37406]/20"
                   placeholder="••••••••"
                 />
-                {errors.confirmPassword && (
+                {signupErrors.confirmPassword && (
                   <p className="mt-1 text-xs text-red-400">
-                    {errors.confirmPassword}
+                    {signupErrors.confirmPassword.message}
                   </p>
                 )}
               </div>
             )}
 
             <button
-              type="button"
-              onClick={handleSubmit}
-              disabled={loading}
+              type="submit"
+              disabled={isBusy}
               className="w-full rounded-lg bg-[#F37406] px-4 py-2.5 sm:py-3 font-semibold text-white shadow-lg transition hover:bg-[#f2df79] hover:text-[#040dbf] hover:shadow-xl hover:shadow-[#F37406]/50 disabled:cursor-not-allowed disabled:opacity-50 active:scale-95"
             >
-              {loading
+              {isBusy
                 ? "Processing..."
                 : mode === "signup"
                 ? "Register"
                 : "Login"}
             </button>
-          </div>
+          </form>
 
           <p className="mt-4 sm:mt-6 text-center text-xs sm:text-sm text-[#01f2f2]">
             {mode === "signup"

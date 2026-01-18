@@ -28,14 +28,14 @@ export default function ContactForm() {
   }
 
   return (
-    <div className="relative mx-auto max-w-[1520px] px-6 py-16 lg:py-20">
+    <div className="relative mx-auto max-w-[1520px] px-6 py-20 lg:py-30">
       <div className="text-center mt-30">
         <h2 className="font-title text-3xl font-semibold text-[#01f2f2] sm:text-4xl mb-12">
           Enquire Now
         </h2>
       </div>
 
-      <div className="mx-auto max-w-3xl space-y-6">
+      <div className="mx-auto space-y-6">
         {/* Name and Email Row */}
         <div className="grid gap-6 md:grid-cols-2">
           <div>
@@ -144,7 +144,7 @@ export default function ContactForm() {
             value={formData.message}
             onChange={handleChange}
             rows={6}
-            className="w-full rounded-lg border border-white bg-transparent px-4 py-3 text-white placeholder-white/50 outline-none transition focus:border-[#F37406] focus:ring-2 focus:ring-[#F37406]/20 resize-none"
+            className="w-full rounded-lg font-title border border-white bg-transparent px-4 py-3 text-white placeholder-white/50 outline-none transition focus:border-[#F37406] focus:ring-2 focus:ring-[#F37406]/20 resize-none"
             placeholder="Enter Your Message"
           />
         </div>

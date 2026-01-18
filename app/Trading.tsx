@@ -1,14 +1,15 @@
 import { useState } from "react"
 import Image from "next/image"
+import PlayStore from "@/components/Store"
 
-export default function TradingTabs() {
+export default function Choose() {
   const [activeTab, setActiveTab] = useState("activity")
 
   const tabs = [
     {
       id: "discover",
-      icon: "/navigate/icon1.png",
-      activeIcon: "/navigate/icon1-blue.png",
+      icon: "/images/navigate/icon1.png",
+      activeIcon: "/images/navigate/icon1-blue.png",
       content: {
         title: "Discover",
         description:
@@ -17,8 +18,8 @@ export default function TradingTabs() {
     },
     {
       id: "activity",
-      icon: "/navigate/icon2.png",
-      activeIcon: "/navigate/icon2-blue.png",
+      icon: "/images/navigate/icon2.png",
+      activeIcon: "/images/navigate/icon2-blue.png",
       content: {
         title: "Activity",
         description:
@@ -27,8 +28,8 @@ export default function TradingTabs() {
     },
     {
       id: "trade",
-      icon: "/navigate/icon3.png",
-      activeIcon: "/navigate/icon3-blue.png",
+      icon: "/images/navigate/icon3.png",
+      activeIcon: "/images/navigate/icon3-blue.png",
       content: {
         title: "Trade",
         description:
@@ -37,8 +38,8 @@ export default function TradingTabs() {
     },
     {
       id: "positions",
-      icon: "/navigate/icon4.png",
-      activeIcon: "/navigate/icon4-blue.png",
+      icon: "/images/navigate/icon4.png",
+      activeIcon: "/images/navigate/icon4-blue.png",
       content: {
         title: "Positions",
         description:
@@ -47,8 +48,8 @@ export default function TradingTabs() {
     },
     {
       id: "account",
-      icon: "/navigate/icon5.png",
-      activeIcon: "/navigate/icon5-blue.png",
+      icon: "/images/navigate/icon5.png",
+      activeIcon: "/images/navigate/icon5-blue.png",
       content: {
         title: "Account",
         description:
@@ -61,6 +62,11 @@ export default function TradingTabs() {
 
   return (
     <div className="mx-auto">
+      <div className="text-center mt-6 mb-14">
+        <h2 className="font-title text-3xl font-semibold text-[#01f2f2] sm:text-4xl">
+          Navigate Our App in 5 Clicks
+        </h2>
+      </div>
       {/* Tabs Navigation */}
       <div className="flex">
         {tabs.map((tab) => (
@@ -83,9 +89,9 @@ export default function TradingTabs() {
       </div>
 
       {/* Content Area */}
-      <div className="rounded-b-xl bg-[#F2DF79] pt-10 min-h-[200px]">
+      <div className="rounded-b-xl rounded-tr-xl bg-[#F2DF79] pt-10 min-h-[200px]">
         {/* Desktop View */}
-        <div className="hidden md:flex flex-row gap-6">
+        <div className="hidden lg:flex flex-row justify-start lg:justify-between">
           {/* 左半屏文字 */}
           <div className="w-1/2 flex flex-col justify-center pl-10">
             <h2 className="font-title text-2xl font-bold text-[#040dbf] mb-4">
@@ -97,38 +103,38 @@ export default function TradingTabs() {
           </div>
 
           {/* 右半屏图片 */}
-          <div className="w-1/2 flex justify-center items-center">
+          <div className="flex-shrink-0 self-end md:self-end">
             {activeTab === "discover" && (
               <img
-                src="/reason/reason-1.png"
+                src="/images/reason/reason-1.png"
                 alt="Discover"
                 className="w-full h-100 object-contain rounded-xl"
               />
             )}
             {activeTab === "activity" && (
               <img
-                src="/reason/reason-2.png"
+                src="/images/reason/reason-2.png"
                 alt="Activity"
                 className="w-full h-100 object-contain rounded-xl"
               />
             )}
             {activeTab === "trade" && (
               <img
-                src="/reason/reason-3.png"
+                src="/images/reason/reason-3.png"
                 alt="Trade"
                 className="w-full h-100 object-contain rounded-xl"
               />
             )}
             {activeTab === "positions" && (
               <img
-                src="/reason/reason-4.png"
+                src="/images/reason/reason-4.png"
                 alt="Positions"
                 className="w-full h-100 object-contain rounded-xl"
               />
             )}
             {activeTab === "account" && (
               <img
-                src="/reason/reason-5.png"
+                src="/images/reason/reason-5.png"
                 alt="Account"
                 className="w-full h-100 object-contain rounded-xl"
               />
@@ -137,7 +143,7 @@ export default function TradingTabs() {
         </div>
 
         {/* Mobile View */}
-        <div className="flex flex-col md:hidden w-full gap-4">
+        <div className="flex flex-col lg:hidden w-full gap-4">
           <h2 className="font-title text-2xl font-bold text-[#040dbf] mb-2 px-10">
             {currentTab?.content.title}
           </h2>
@@ -147,41 +153,42 @@ export default function TradingTabs() {
 
           {activeTab === "discover" && (
             <img
-              src="/reason/reason-1.png"
+              src="/images/reason/reason-1.png"
               alt="Discover"
               className="w-full h-auto object-contain rounded-xl"
             />
           )}
           {activeTab === "activity" && (
             <img
-              src="/reason/reason-2.png"
+              src="/images/reason/reason-2.png"
               alt="Activity"
               className="w-full h-auto object-contain rounded-xl"
             />
           )}
           {activeTab === "trade" && (
             <img
-              src="/reason/reason-3.png"
+              src="/images/reason/reason-3.png"
               alt="Trade"
               className="w-full h-auto object-contain rounded-xl"
             />
           )}
           {activeTab === "positions" && (
             <img
-              src="/reason/reason-4.png"
+              src="/images/reason/reason-4.png"
               alt="Positions"
               className="w-full h-auto object-contain rounded-xl"
             />
           )}
           {activeTab === "account" && (
             <img
-              src="/reason/reason-5.png"
+              src="/images/reason/reason-5.png"
               alt="Account"
               className="w-full h-auto object-contain rounded-xl"
             />
           )}
         </div>
       </div>
+      <PlayStore />
     </div>
   )
 }

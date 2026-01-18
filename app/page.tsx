@@ -6,8 +6,11 @@ import { useEffect, useRef, useState, useSyncExternalStore } from "react"
 import { clearUser, getUser, subscribe } from "../store/user"
 import { AuthModal, type AuthMode } from "./auth-modal"
 import { showToast } from "../components/toast"
-import ContactForm from "@/components/ContactForm"
-import TradingTabs from "@/components/Trading"
+import ContactForm from "@/app/ContactForm"
+import TradingTabs from "@/app/Trading"
+import Choose from "@/app/Choose"
+import LinkAccount from "@/app/LinkAccount"
+import TradLikePro from "@/app/TradeLikePro"
 
 const palette = {
   background: "#3A53BA",
@@ -200,7 +203,7 @@ export default function Page() {
 
   return (
     <div
-      className="relative min-h-screen overflow-hidden text-[var(--foreground)]"
+      className="min-h-screen overflow-hidden text-[var(--foreground)] flex flex-col"
       style={{ backgroundColor: palette.background, color: palette.primary }}
     >
       <AuthModal
@@ -231,7 +234,7 @@ export default function Page() {
             }}
           >
             <Image
-              src="/navigation/logo.png"
+              src="/images/navigation/logo.png"
               alt="logo"
               width={150}
               height={34}
@@ -240,7 +243,7 @@ export default function Page() {
             />
           </Link>
 
-          <div className="hidden md:flex flex flex-col text-center ml-30 mb-3">
+          <div className="hidden lg:flex flex flex-col text-center ml-30 mb-3">
             <span className="text-[12px] font-subtitle uppercase text-white">
               Promotion
             </span>
@@ -249,7 +252,7 @@ export default function Page() {
             </span>
           </div>
 
-          <div className="hidden items-center gap-x-2 md:flex ml-30">
+          <div className="hidden items-center gap-x-2 lg:flex ml-30">
             <div className="flex items-center gap-2">
               {/* Days */}
               <div className="text-center">
@@ -300,7 +303,7 @@ export default function Page() {
           </div>
 
           <div className="flex items-center gap-6 ml-auto">
-            <div className="hidden items-center gap-3 md:flex mb-3">
+            <div className="hidden items-center gap-3 lg:flex mb-3">
               <button
                 type="button"
                 className="font-subtitle rounded-full bg-[#F37406] px-4 py-3 text-xs font-semibold text-white shadow-[0_10px_40px_-20px_rgba(243,116,6,0.65)] transition-transform hover:-translate-y-0.5"
@@ -313,7 +316,7 @@ export default function Page() {
               </button>
             </div>
 
-            <div ref={userMenuRef} className="relative hidden md:flex">
+            <div ref={userMenuRef} className="relative hidden lg:flex">
               <button
                 type="button"
                 aria-haspopup="menu"
@@ -322,7 +325,7 @@ export default function Page() {
                 className="flex h-10 w-10 mb-3 items-center justify-center rounded-full border-2 border-white/30 bg-white/10 transition hover:border-[#F37406] hover:bg-white/20 hover:scale-105"
               >
                 <Image
-                  src={"/navigation/avatar_white.png"}
+                  src={"/images/navigation/avatar_white.png"}
                   alt="User avatar"
                   width={44}
                   height={44}
@@ -402,7 +405,7 @@ export default function Page() {
 
             <button
               type="button"
-              className="relative ml-3 mb-3 flex h-11 w-11 items-center justify-center transition md:hidden"
+              className="relative ml-3 mb-3 flex h-11 w-11 items-center justify-center transition lg:hidden"
               aria-expanded={menuOpen}
               aria-label="Toggle navigation"
               onClick={() => {
@@ -417,13 +420,55 @@ export default function Page() {
 
         {/* Mobile Menu */}
         <div
-          className={`border-t border-white/10 bg-[#112A4D] transition-all duration-300 md:hidden ${
+          className={`border-t border-white/10 bg-[#112A4D] transition-all duration-300 lg:hidden ${
             menuOpen
               ? "max-h-96 opacity-100"
               : "max-h-0 opacity-0 overflow-hidden"
           }`}
         >
           <div className="space-y-4 px-4 pb-6 pt-4">
+            <div className="rounded-2xl border border-white/15 bg-white/5 px-4 py-3 text-center text-white">
+              <p className="text-[11px] uppercase tracking-[0.2em] text-white">
+                Promo ends in
+              </p>
+              <div className="mt-2 flex items-end justify-center gap-2 font-subtitle">
+                <div className="text-center">
+                  <div className="text-2xl font-light">
+                    {String(timeLeft.days).padStart(2, "0")}
+                  </div>
+                  <div className="text-[10px] uppercase tracking-wide text-white/80">
+                    Days
+                  </div>
+                </div>
+                <span className="text-xl text-white pb-3">:</span>
+                <div className="text-center">
+                  <div className="text-2xl font-light">
+                    {String(timeLeft.hours).padStart(2, "0")}
+                  </div>
+                  <div className="text-[10px] uppercase tracking-wide text-white/80">
+                    Hours
+                  </div>
+                </div>
+                <span className="text-xl text-white pb-3">:</span>
+                <div className="text-center">
+                  <div className="text-2xl font-light">
+                    {String(timeLeft.minutes).padStart(2, "0")}
+                  </div>
+                  <div className="text-[10px] uppercase tracking-wide text-white/80">
+                    Minutes
+                  </div>
+                </div>
+                <span className="text-xl text-white pb-3">:</span>
+                <div className="text-center">
+                  <div className="text-2xl font-light">
+                    {String(timeLeft.seconds).padStart(2, "0")}
+                  </div>
+                  <div className="text-[10px] uppercase tracking-wide text-white/80">
+                    Seconds
+                  </div>
+                </div>
+              </div>
+            </div>
             <button
               type="button"
               className="block w-full rounded-xl bg-[#F37406] px-4 py-3 text-center text-sm font-bold uppercase tracking-wider text-white shadow-lg transition hover:bg-[#e56805]"
@@ -453,9 +498,9 @@ export default function Page() {
         </div>
       </header>
 
-      <main className="relative z-10 pt-20">
+      <main className="relative z-10 pt-20 flex-1">
         <section
-          id="#top"
+          id="top"
           className="mx-auto flex max-w-[1520px] flex-col gap-12 px-6 pb-24 pt-8 lg:flex-row lg:items-center lg:pt-16"
         >
           <div className="flex-1 space-y-8">
@@ -590,157 +635,167 @@ export default function Page() {
           </div>
         </section>
 
-        <section id="features" className="px-6 py-20">
-          <div className="mx-auto flex max-w-[1520px] flex-col gap-6 md:flex-row md:items-end md:justify-between">
-            <div className="space-y-3">
-              <p className="font-subtitle text-xs uppercase tracking-[0.28em] text-[#01f2f2]">
-                What ships with Blackwell
-              </p>
-              <h2 className="font-title text-3xl font-semibold text-[#f2df79] sm:text-4xl">
-                Everything you need to sign in without slowing down.
-              </h2>
-            </div>
-            <p className="font-subtitle max-w-xl text-base text-[#01f2f2]">
-              Configure flows, observability, and policies from one place. Every
-              part is built to scale with your compliance and uptime standards.
-            </p>
-          </div>
+        <section className="relative w-full bg-[url('/images/background/bg-1.png')] bg-contain bg-top bg-no-repeat">
+          <TradLikePro />
+        </section>
 
-          <div className="mx-auto mt-10 grid max-w-[1520px] gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {features.map((feature) => (
-              <div
-                key={feature.title}
-                className="group relative overflow-hidden rounded-3xl border border-[#f2df79]/25 bg-[#040dbf]/25 p-6 backdrop-blur transition hover:-translate-y-1 hover:border-[#F37406]/50"
-              >
-                <div className="absolute -right-8 -top-8 h-24 w-24 rounded-full bg-gradient-to-br from-[#f2df79]/25 via-[#F37406]/25 to-[#01f2f2]/25 blur-3xl transition duration-300 group-hover:scale-125" />
-                <div className="relative flex items-center gap-3">
-                  <span className="rounded-full bg-[#01f2f2]/15 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-[#f2df79]">
-                    {feature.tag}
-                  </span>
-                </div>
-                <h3 className="relative mt-4 text-xl font-semibold text-[#f2df79]">
-                  {feature.title}
-                </h3>
-                <p className="relative mt-3 text-sm leading-relaxed text-[#01f2f2]">
-                  {feature.copy}
-                </p>
-              </div>
-            ))}
+        <section id="link" className="px-6 py-20">
+          <div className="mx-auto max-w-[1520px] pb-16">
+            <LinkAccount />
           </div>
         </section>
 
-        <section
-          id="flow"
-          className="mx-auto max-w-[1520px] px-6 py-20 lg:py-24"
-        >
-          <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
-            <div className="space-y-4">
-              <p className="font-subtitle text-xs uppercase tracking-[0.28em] text-[#01f2f2]">
-                End-to-end control
-              </p>
-              <h2 className="font-title text-3xl font-semibold text-[#f2df79] sm:text-4xl">
-                Design your flow once. We keep it stable everywhere.
-              </h2>
-              <p className="font-subtitle text-base text-[#01f2f2]">
-                Blackwell connects your identity layer, risk signals, and
-                observability so you can focus on building features. No more
-                juggling vendors for each touchpoint.
-              </p>
-            </div>
-            <div className="rounded-3xl border border-[#f2df79]/25 bg-[#040dbf]/20 p-6 backdrop-blur">
-              <div className="flex flex-col gap-4">
-                {steps.map((step, index) => (
-                  <div
-                    key={step.title}
-                    className="flex gap-4 rounded-2xl border border-[#f2df79]/25 bg-[#040dbf]/30 p-4"
-                  >
-                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-[#f2df79]/25 via-[#F37406]/25 to-[#01f2f2]/25 text-base font-semibold text-[#040dbf]">
-                      {index + 1}
-                    </div>
-                    <div>
-                      <p className="text-base font-semibold text-[#f2df79]">
-                        {step.title}
-                      </p>
-                      <p className="text-sm text-[#01f2f2]">{step.body}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
+        <section className="relative w-full bg-[url('/images/background/bg-2.png')] bg-contain bg-top bg-no-repeat">
+          <Choose />
         </section>
 
-        <section id="pricing" className="px-6 py-16">
-          <div className="mx-auto max-w-[1520px] py-16">
-            <div className="text-center mt-6 mb-14">
-              <h2 className="font-title text-3xl font-semibold text-[#01f2f2] sm:text-4xl">
-                Navigate Our App in 5 Clicks
-              </h2>
-            </div>
-
+        <section id="trading" className="px-6 py-16">
+          <div className="mx-auto max-w-[1520px]">
             <TradingTabs />
-
-            <div className="flex justify-center gap-3 mt-10">
-              <div className="h-12 flex items-center overflow-hidden">
-                <Image
-                  src="/playstore/google-play.jpg"
-                  alt="Google Play"
-                  width={393}
-                  height={118}
-                  className="h-full w-auto object-contain rounded-xl"
-                />
-              </div>
-
-              <div className="h-12 flex items-center overflow-hidden">
-                <Image
-                  src="/playstore/app-store.jpg"
-                  alt="App Store"
-                  width={393}
-                  height={118}
-                  className="h-full w-auto object-contain rounded-xl"
-                />
-              </div>
-            </div>
           </div>
         </section>
 
         <section
-          id="contact"
-          className="relative w-screen bg-cover bg-top bg-no-repeat"
-          style={{
-            backgroundImage: "url(/background/bg-3.png)",
-          }}
+          id="enquire"
+          className="relative w-full bg-[url('/images/background/bg-3.png')] bg-cover bg-top bg-no-repeat"
         >
-          {/* 内容容器 */}
           <ContactForm />
         </section>
       </main>
 
-      <footer className="border-t border-[#f2df79]/25 bg-[#3A53BA]/90 px-6 py-4 text-sm text-[#01f2f2] backdrop-blur">
-        <div className="mx-auto flex max-w-[1520px] flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-          <p className="font-subtitle">
-            Blackwell Auth © {new Date().getFullYear()}
-          </p>
-          <div className="flex items-center gap-4">
-            <a
-              href="#top"
-              className="transition hover:text-[#F37406]"
-              onClick={(e) => {
-                e.preventDefault()
-                window.scrollTo({ top: 0, behavior: "smooth" })
-              }}
-            >
-              Back to top
-            </a>
-            <a href="#features" className="transition hover:text-[#F37406]">
-              Product
-            </a>
-            <a
-              href="mailto:team@blackwell.dev"
-              className="transition hover:text-[#F37406]"
-            >
-              Contact
-            </a>
+      <footer className="mt-auto border-t border-[#f2df79]/25 bg-[#112A4D] px-6 py-10 text-sm text-[#01f2f2] backdrop-blur">
+        <div className="mx-auto flex max-w-[1520px] flex-col gap-8">
+          {/* Mobile-first stacked layout */}
+          <div className="flex flex-col gap-6 lg:hidden">
+            <div className="space-y-3">
+              <h3 className="text-xl font-title font-bold text-white">
+                Blackwell Auth
+              </h3>
+              <p className="text-white/70">
+                Trade smarter, faster, and more securely with our adaptive auth
+                platform.
+              </p>
+            </div>
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+              <div className="space-y-2">
+                <p className="text-[#FFD700] font-semibold uppercase tracking-wide text-xs">
+                  Product
+                </p>
+                <div className="flex flex-col gap-2 text-white/80">
+                  <a href="#features" className="hover:text-[#01f2f2]">
+                    Features
+                  </a>
+                  <a href="#pricing" className="hover:text-[#01f2f2]">
+                    Pricing
+                  </a>
+                  <a href="#tradelikepro" className="hover:text-[#01f2f2]">
+                    Quick Start
+                  </a>
+                </div>
+              </div>
+              <div className="space-y-2">
+                <p className="text-[#FFD700] font-semibold uppercase tracking-wide text-xs">
+                  Resources
+                </p>
+                <div className="flex flex-col gap-2 text-white/80">
+                  <a href="#link" className="hover:text-[#01f2f2]">
+                    Link MT4
+                  </a>
+                  <a href="#trading" className="hover:text-[#01f2f2]">
+                    App Navigation
+                  </a>
+                  <a href="#enquire" className="hover:text-[#01f2f2]">
+                    Enquire
+                  </a>
+                </div>
+              </div>
+              <div className="space-y-2">
+                <p className="text-[#FFD700] font-semibold uppercase tracking-wide text-xs">
+                  Contact
+                </p>
+                <div className="flex flex-col gap-2 text-white/80">
+                  <a
+                    href="mailto:team@blackwell.dev"
+                    className="hover:text-[#01f2f2]"
+                  >
+                    Contact Sales
+                  </a>
+                  <a
+                    href="mailto:support@blackwell.dev"
+                    className="hover:text-[#01f2f2]"
+                  >
+                    Support
+                  </a>
+                  <a href="#contact" className="hover:text-[#01f2f2]">
+                    Request Demo
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Desktop layout */}
+          <div className="hidden lg:flex items-center justify-between">
+            <div className="space-y-3">
+              <h3 className="text-2xl font-title font-bold text-white">
+                Blackwell Auth
+              </h3>
+              <p className="text-white/70 max-w-lg">
+                Professional trading authentication platform. Trade smarter,
+                faster, and more securely.
+              </p>
+            </div>
+            <div className="flex items-center gap-6 text-white/80">
+              <a href="#features" className="transition hover:text-[#F37406]">
+                Product
+              </a>
+              <a
+                href="#tradelikepro"
+                className="transition hover:text-[#F37406]"
+              >
+                Quick Start
+              </a>
+              <a href="#link" className="transition hover:text-[#F37406]">
+                MT4 Link
+              </a>
+              <a href="#choose" className="transition hover:text-[#F37406]">
+                Why Choose Us
+              </a>
+              <a href="#trading" className="transition hover:text-[#F37406]">
+                App Navigation
+              </a>
+              <a href="#enquire" className="transition hover:text-[#F37406]">
+                Enquire
+              </a>
+            </div>
+          </div>
+
+          <div className="h-px bg-gradient-to-r from-transparent via-[#f2df79]/25 to-transparent" />
+
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <p className="text-sm text-white/60 font-subtitle">
+              © {new Date().getFullYear()} Blackwell Auth. All rights reserved.
+            </p>
+            <div className="flex flex-wrap items-center gap-4 sm:gap-6 text-white/60">
+              <a href="#privacy" className="hover:text-[#01f2f2] transition">
+                Privacy Policy
+              </a>
+              <a href="#terms" className="hover:text-[#01f2f2] transition">
+                Terms of Service
+              </a>
+              <button
+                onClick={(e) => {
+                  e.preventDefault()
+                  window.scrollTo({ top: 0, behavior: "smooth" })
+                }}
+                className="group inline-flex items-center gap-2 hover:text-[#FFD700] transition"
+              >
+                <span>Back to top</span>
+                <span className="transform group-hover:-translate-y-1 transition-transform">
+                  ↑
+                </span>
+              </button>
+            </div>
           </div>
         </div>
       </footer>
