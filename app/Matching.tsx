@@ -23,13 +23,13 @@ export default function Matching() {
           Fast Matching
         </h2>
         <div className="relative flex flex-col lg:flex-row items-center justify-center gap-10 lg:gap-10 lg:py-14">
-          <div className="relative lg:w-80 lg:h-[600px] w-auto h-[300px] bg-black lg:rounded-3xl rounded-xl shadow-2xl flex-shrink-0">
+          <div className="relative lg:w-80 lg:h-[600px] w-auto h-[350px] bg-black lg:rounded-3xl rounded-xl shadow-2xl flex-shrink-0">
             <video
               autoPlay
               loop
               muted
               playsInline
-              className="w-full h-full object-cover lg:rounded-3xl rounded-xl"
+              className="w-full h-full object-cover lg:rounded-3xl rounded-2xl"
             >
               <source src="/video/mobile-video.mp4" type="video/mp4" />
             </video>

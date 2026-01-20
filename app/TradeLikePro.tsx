@@ -38,11 +38,11 @@ export default function InteractiveSteps() {
   ]
 
   return (
-    <div className="relative mx-auto max-w-[1520px] pt-20 lg:py-20 px-5 lg:px-0">
+    <div className="relative mx-auto max-w-[1520px] pt-20 lg:py-20 px-5 lg:px-20">
       <div className="text-center pt-[20px] lg:pt-[100px] mb-14">
         <h2
           id="tradelikepro"
-          className="font-title text-3xl font-semibold text-[#01f2f2] sm:text-4xl pt-24 lg:pt-24"
+          className="font-title text-3xl font-semibold text-[#01f2f2] sm:text-4xl pt-24 lg:pt-30"
         >
           Trade Like a Pro in Minutes
         </h2>

@@ -28,7 +28,7 @@ export default function ContactForm() {
   }
 
   return (
-    <div className="relative mx-auto max-w-[1520px] py-20 lg:py-30 px-5 lg:px-0">
+    <div className="relative mx-auto max-w-[1520px] py-20 lg:py-30 px-5 lg:px-20">
       <div className="text-center mt-30">
         <h2 className="font-title text-3xl font-semibold text-[#01f2f2] sm:text-4xl mb-12">
           Enquire Now

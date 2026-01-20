@@ -53,7 +53,7 @@ export default function StepSlideshow() {
   ]
 
   return (
-    <div className="mx-auto max-w-[1520px] pb-16 px-5 lg:px-0">
+    <div className="mx-auto max-w-[1520px] px-5 lg:px-20">
       <div className="text-center mt-6 mb-8">
         <h2 className="font-title text-3xl font-semibold text-[#01f2f2] sm:text-4xl">
           How to Link MT4 Account
@@ -111,7 +111,7 @@ export default function StepSlideshow() {
 
               {/* 移动端右箭头 - 不是最后一个卡片时显示 */}
               {index < slides.length - 1 && (
-                <div className="xl:hidden absolute top-[250px] lg:-right-[50px] -right-[80px] transform -translate-y-1/2 z-10">
+                <div className="xl:hidden absolute top-[50%] lg:-right-[50px] -right-[80px] transform -translate-y-1/2 z-10">
                   <img
                     src="/images/arrows/arrow.png"
                     alt="next"
@@ -121,7 +121,7 @@ export default function StepSlideshow() {
               )}
 
               {/* 卡片容器 */}
-              <div className="relative rounded-3xl p-4 w-full flex flex-col h-120 lg:h-[500px]">
+              <div className="relative rounded-3xl p-4 w-full flex flex-col h-90 lg:h-[500px]">
                 {/* 自定义边框 - 上边 */}
                 <div className="absolute top-0 left-0 right-0 h-1 bg-[#F37406] rounded-t-3xl"></div>
 
@@ -182,7 +182,6 @@ export default function StepSlideshow() {
           </SwiperSlide>
         ))}
       </Swiper>
-      <RegisterButton />
     </div>
   )
 }

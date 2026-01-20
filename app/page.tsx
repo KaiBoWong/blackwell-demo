@@ -13,6 +13,8 @@ import LinkAccount from "@/app/LinkAccount"
 import TradLikePro from "@/app/TradeLikePro"
 import Analysis from "@/app/Analysis"
 import Matching from "@/app/Matching"
+import HeroSection from "@/app/Top"
+import RegisterButton from "@/components/RegisterButton"
 
 const palette = {
   background: "#3A53BA",
@@ -21,60 +23,6 @@ const palette = {
   gold: "#f2df79",
   orange: "#F37406",
 }
-
-const stats = [
-  { label: "Avg. verification", value: "42s" },
-  { label: "Uptime", value: "99.99%" },
-  { label: "Countries live", value: "37" },
-]
-
-const features = [
-  {
-    title: "Adaptive trust",
-    copy: "Blend SSO, passkeys, and MFA behind one decision engine so your users never see friction unless risk spikes.",
-    tag: "Risk aware",
-  },
-  {
-    title: "Policy as code",
-    copy: "Ship rules with versioned blueprints. Simulate before rollout to catch edge cases without blocking revenue.",
-    tag: "Predictable",
-  },
-  {
-    title: "Fastest path in",
-    copy: "Prebuilt flows for magic links, SMS, and OAuth that you can swap live without rewriting a single callback.",
-    tag: "Flexible",
-  },
-  {
-    title: "Observability",
-    copy: "Deep traces on every auth hop, plus live health so incidents get contained before customers notice.",
-    tag: "Transparent",
-  },
-  {
-    title: "Privacy by default",
-    copy: "Data scoped to the tenant, encrypted at rest and in flight with automated key rotation every 24 hours.",
-    tag: "Secure",
-  },
-  {
-    title: "Drop-in widgets",
-    copy: "Ship polished login, consent, and recovery views that inherit your brand tokens in minutes.",
-    tag: "Brand ready",
-  },
-]
-
-const steps = [
-  {
-    title: "Shape the journey",
-    body: "Define the entry, backup, and recovery options you want. We build the safest path dynamically.",
-  },
-  {
-    title: "Plug into your stack",
-    body: "SDKs for web and mobile, webhooks for everything else. OAuth, OIDC, SAML all ship together.",
-  },
-  {
-    title: "Ship and observe",
-    body: "Roll out gradually, monitor live metrics, and adjust policies without redeploying your app.",
-  },
-]
 
 function MenuIcon({ open }: { open: boolean }) {
   return (
@@ -114,7 +62,6 @@ export default function Page() {
   })
   const [userMenuOpen, setUserMenuOpen] = useState(false)
   const userMenuRef = useRef<HTMLDivElement | null>(null)
-  const ctaHref = "#contact"
   const [authModalOpen, setAuthModalOpen] = useState(false)
   const [authMode, setAuthMode] = useState<AuthMode>("login")
   const currentUser = useSyncExternalStore(subscribe, getUser, getUser)
@@ -218,13 +165,7 @@ export default function Page() {
         onAuthSuccess={handleAuthSuccess}
       />
 
-      <div className="pointer-events-none absolute inset-0 opacity-60">
-        <div className="absolute -left-24 top-10 h-64 w-64 rounded-full bg-[#f2df79]/30 blur-3xl" />
-        <div className="absolute right-0 top-48 h-72 w-72 rounded-full bg-[#01f2f2]/25 blur-[120px]" />
-        <div className="absolute -bottom-32 left-10 h-80 w-80 rounded-full bg-[#F37406]/20 blur-[140px]" />
-      </div>
-
-      <header className="fixed inset-x-0 top-0 z-50 bg-[#112A4D] backdrop-blur">
+      <header className="fixed inset-x-0 top-0 z-50 bg-[#112A4D] backdrop-blur px-5 lg:px-20">
         <div className="mx-auto flex max-w-[1520px] items-center pt-5">
           <Link
             href="#top"
@@ -242,7 +183,7 @@ export default function Page() {
             />
           </Link>
 
-          <div className="hidden lg:flex flex flex-col text-center ml-30 mb-3">
+          <div className="hidden lg:flex flex flex-col text-center xl:ml-30 lg:ml-10 mb-3">
             <span className="text-[12px] font-subtitle uppercase text-white">
               Promotion
             </span>
@@ -251,7 +192,7 @@ export default function Page() {
             </span>
           </div>
 
-          <div className="hidden items-center gap-x-2 lg:flex ml-30">
+          <div className="hidden items-center gap-x-2 lg:flex xl:ml-30 lg:ml-15">
             <div className="flex items-center gap-2">
               {/* Days */}
               <div className="text-center">
@@ -496,140 +437,8 @@ export default function Page() {
       </header>
 
       <main className="relative z-10 pt-20 flex-1">
-        <section
-          id="top"
-          className="mx-auto flex max-w-[1520px] flex-col gap-12 pb-24 pt-8 lg:flex-row lg:items-center lg:pt-16"
-        >
-          <div className="flex-1 space-y-8">
-            <div className="inline-flex items-center gap-3 rounded-full border border-[#f2df79]/30 bg-[#01f2f2]/10 px-4 py-2 text-sm text-[#01f2f2] backdrop-blur">
-              <span className="h-2 w-2 rounded-full bg-[#F37406]" />
-              Adaptive access for modern teams
-            </div>
-            <div className="space-y-4">
-              <h1 className="font-title text-4xl font-semibold leading-tight text-[#f2df79] sm:text-5xl lg:text-6xl">
-                Authenticate without dragging growth.
-              </h1>
-              <p className="font-subtitle max-w-2xl text-lg text-[#01f2f2]">
-                Blackwell keeps your users safe with risk-aware login, live
-                health, and instant rollback. Design flows once and ship them
-                everywhere — web, mobile, and service-to-service.
-              </p>
-            </div>
-            <div className="flex flex-col gap-3 sm:flex-row">
-              <a
-                href={ctaHref}
-                className="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[#f2df79] via-[#F37406] to-[#01f2f2] px-6 py-3 text-base font-semibold text-[#040dbf] shadow-[0_18px_60px_-28px_rgba(243,116,6,0.65)] transition hover:-translate-y-0.5"
-              >
-                Launch a demo
-                <span aria-hidden="true" className="text-lg">
-                  →
-                </span>
-              </a>
-              <a
-                href="#features"
-                className="inline-flex items-center justify-center gap-2 rounded-full border border-[#f2df79]/60 px-6 py-3 text-base font-semibold text-[#f2df79] transition hover:border-[#F37406] hover:bg-[#F37406]/15"
-              >
-                See how it works
-              </a>
-            </div>
-            <div className="grid grid-cols-2 gap-6 sm:grid-cols-3">
-              {stats.map((stat) => (
-                <div
-                  key={stat.label}
-                  className="rounded-2xl border border-[#f2df79]/30 bg-[#040dbf]/20 px-4 py-3 backdrop-blur"
-                >
-                  <p className="text-sm uppercase tracking-[0.16em] text-[#01f2f2]">
-                    {stat.label}
-                  </p>
-                  <p className="mt-2 text-2xl font-semibold text-[#f2df79]">
-                    {stat.value}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="flex-1 lg:max-w-[480px]">
-            <div className="relative overflow-hidden rounded-3xl border border-[#f2df79]/25 bg-[#040dbf]/20 p-6 shadow-2xl backdrop-blur">
-              <div className="absolute right-6 top-6 h-12 w-12 rounded-full bg-gradient-to-br from-[#f2df79]/40 via-[#F37406]/40 to-[#01f2f2]/40 blur-2xl" />
-              <div className="relative space-y-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm uppercase tracking-[0.2em] text-[#01f2f2]">
-                      Live traffic
-                    </p>
-                    <p className="text-xl font-semibold text-[#f2df79]">
-                      Access snapshot
-                    </p>
-                  </div>
-                  <div className="flex items-center gap-2 text-sm text-[#F37406]">
-                    <span className="h-2 w-2 rounded-full bg-[#F37406]" />
-                    Stable
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-2 gap-3 text-sm">
-                  {["Passkey", "Magic link", "SSO", "Recovery"].map(
-                    (label, idx) => (
-                      <div
-                        key={label}
-                        className="rounded-2xl border border-[#f2df79]/25 bg-[#01f2f2]/10 px-3 py-3"
-                      >
-                        <p className="text-xs uppercase tracking-[0.1em] text-[#040dbf]">
-                          {label}
-                        </p>
-                        <p className="mt-2 text-xl font-semibold text-[#f2df79]">
-                          {idx === 0
-                            ? "58%"
-                            : idx === 1
-                              ? "23%"
-                              : idx === 2
-                                ? "14%"
-                                : "5%"}
-                        </p>
-                        <p className="text-xs text-[#040dbf]">
-                          Share of logins
-                        </p>
-                      </div>
-                    ),
-                  )}
-                </div>
-
-                <div className="rounded-2xl border border-[#f2df79]/25 bg-[#040dbf]/20 p-4">
-                  <div className="flex items-center justify-between">
-                    <p className="text-sm font-semibold text-[#f2df79]">
-                      Decision engine
-                    </p>
-                    <span className="rounded-full bg-[#01f2f2]/20 px-2 py-1 text-xs font-semibold text-[#01f2f2]">
-                      Risk normal
-                    </span>
-                  </div>
-                  <div className="mt-4 space-y-3 text-sm text-[#01f2f2]">
-                    <div className="flex items-center justify-between">
-                      <span>Bot shield</span>
-                      <span className="text-[#f2df79]">Active</span>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span>Device trust</span>
-                      <span className="text-[#F37406]">Reviewing</span>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span>Location insight</span>
-                      <span className="text-[#f2df79]">Clear</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="rounded-2xl border border-[#f2df79]/35 bg-gradient-to-r from-[#f2df79]/20 via-[#F37406]/15 to-[#01f2f2]/15 p-4 text-sm text-[#f2df79]">
-                  <p className="font-semibold">Zero downtime upgrades</p>
-                  <p className="mt-1 text-[#01f2f2]">
-                    Swap auth patterns live. If conversion dips, one-click
-                    rollback restores the previous flow instantly.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
+        <section>
+          <HeroSection onRegisterClick={() => openAuth("signup")} />
         </section>
 
         <section>
@@ -644,12 +453,14 @@ export default function Page() {
           <TradLikePro />
         </section>
 
-        <section id="link" className="py-20">
+        <section id="link" className="py-24">
           <LinkAccount />
+          <RegisterButton onRegisterClick={() => openAuth("signup")} />
         </section>
 
-        <section className="relative w-full bg-[url('/images/background/bg-2.png')] bg-contain bg-top bg-no-repeat">
+        <section className="relative w-full bg-[url('/images/background/bg-2.png')] bg-contain bg-top bg-no-repeat pb-10 lg:pb-30 ">
           <Choose />
+          <RegisterButton onRegisterClick={() => openAuth("signup")} />
         </section>
 
         <section id="trading" className="py-16">
