@@ -453,7 +453,7 @@ export default function Page() {
           <TradLikePro />
         </section>
 
-        <section id="link" className="py-24">
+        <section className="pb-24">
           <LinkAccount />
           <RegisterButton onRegisterClick={() => openAuth("signup")} />
         </section>
@@ -463,86 +463,74 @@ export default function Page() {
           <RegisterButton onRegisterClick={() => openAuth("signup")} />
         </section>
 
-        <section id="trading" className="py-16">
+        <section>
           <TradingTabs />
         </section>
 
-        <section
-          id="enquire"
-          className="relative w-full bg-[url('/images/background/bg-3.png')] bg-cover bg-top bg-no-repeat"
-        >
+        <section className="relative w-full bg-[url('/images/background/bg-3.png')] bg-cover bg-top bg-no-repeat">
           <ContactForm />
         </section>
       </main>
 
       <footer className="mt-auto border-t border-[#f2df79]/25 bg-[#112A4D] px-6 py-10 text-sm text-[#01f2f2] backdrop-blur">
         <div className="mx-auto flex max-w-[1520px] flex-col gap-8">
-          {/* Mobile-first stacked layout */}
-          <div className="flex flex-col gap-6 lg:hidden">
-            <div className="space-y-3">
+          {/* Mobile View */}
+          <div className="flex flex-col lg:hidden gap-6">
+            {/* 标题 + 描述 */}
+            <div className="space-y-2">
               <h3 className="text-xl font-title font-bold text-white">
-                Blackwell Auth
+                Blackwell Global
               </h3>
-              <p className="text-white/70">
-                Trade smarter, faster, and more securely with our adaptive auth
-                platform.
+              <p className="text-white/70 text-sm">
+                Professional trading authentication platform. Trade smarter,
+                faster, and more securely.
               </p>
             </div>
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-              <div className="space-y-2">
-                <p className="text-[#FFD700] font-semibold uppercase tracking-wide text-xs">
-                  Product
-                </p>
-                <div className="flex flex-col gap-2 text-white/80">
-                  <a href="#features" className="hover:text-[#01f2f2]">
-                    Features
-                  </a>
-                  <a href="#pricing" className="hover:text-[#01f2f2]">
-                    Pricing
-                  </a>
-                  <a href="#tradelikepro" className="hover:text-[#01f2f2]">
-                    Quick Start
-                  </a>
-                </div>
-              </div>
-              <div className="space-y-2">
-                <p className="text-[#FFD700] font-semibold uppercase tracking-wide text-xs">
-                  Resources
-                </p>
-                <div className="flex flex-col gap-2 text-white/80">
-                  <a href="#link" className="hover:text-[#01f2f2]">
-                    Link MT4
-                  </a>
-                  <a href="#trading" className="hover:text-[#01f2f2]">
-                    App Navigation
-                  </a>
-                  <a href="#enquire" className="hover:text-[#01f2f2]">
-                    Enquire
-                  </a>
-                </div>
-              </div>
-              <div className="space-y-2">
-                <p className="text-[#FFD700] font-semibold uppercase tracking-wide text-xs">
-                  Contact
-                </p>
-                <div className="flex flex-col gap-2 text-white/80">
-                  <a
-                    href="mailto:team@blackwell.dev"
-                    className="hover:text-[#01f2f2]"
-                  >
-                    Contact Sales
-                  </a>
-                  <a
-                    href="mailto:support@blackwell.dev"
-                    className="hover:text-[#01f2f2]"
-                  >
-                    Support
-                  </a>
-                  <a href="#contact" className="hover:text-[#01f2f2]">
-                    Request Demo
-                  </a>
-                </div>
-              </div>
+
+            {/* 链接导航 - 垂直显示 */}
+            <div className="flex flex-wrap gap-4">
+              <a
+                href="#matching"
+                className="text-white/80 text-sm transition hover:text-[#F37406]"
+              >
+                Matching
+              </a>
+              <a
+                href="#analysis"
+                className="text-white/80 text-sm transition hover:text-[#F37406]"
+              >
+                Analysis
+              </a>
+              <a
+                href="#tradelikepro"
+                className="text-white/80 text-sm transition hover:text-[#F37406]"
+              >
+                Quick Start
+              </a>
+              <a
+                href="#link"
+                className="text-white/80 text-sm transition hover:text-[#F37406]"
+              >
+                MT4 Link
+              </a>
+              <a
+                href="#choose"
+                className="text-white/80 text-sm transition hover:text-[#F37406]"
+              >
+                Why Choose Us
+              </a>
+              <a
+                href="#trading"
+                className="text-white/80 text-sm transition hover:text-[#F37406]"
+              >
+                App Navigation
+              </a>
+              <a
+                href="#enquire"
+                className="text-white/80 text-sm transition hover:text-[#F37406]"
+              >
+                Enquire
+              </a>
             </div>
           </div>
 
@@ -558,6 +546,9 @@ export default function Page() {
               </p>
             </div>
             <div className="flex items-center gap-6 text-white/80">
+              <a href="#matching" className="transition hover:text-[#F37406]">
+                Matching
+              </a>
               <a href="#analysis" className="transition hover:text-[#F37406]">
                 Analysis
               </a>

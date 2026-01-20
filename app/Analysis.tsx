@@ -5,7 +5,7 @@ import { useState } from "react"
 
 export default function Analysis() {
   return (
-    <div className="mx-auto max-w-[1520px] px-5 lg:px-0">
+    <div className="mx-auto max-w-[1520px] px-5 lg:px-0 pb-10 lg:pb-10">
       <div className="text-center mb-14">
         <h2
           id="analysis"

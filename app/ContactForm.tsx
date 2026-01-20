@@ -28,9 +28,12 @@ export default function ContactForm() {
   }
 
   return (
-    <div className="relative mx-auto max-w-[1520px] py-20 lg:py-30 px-5 lg:px-20">
-      <div className="text-center mt-30">
-        <h2 className="font-title text-3xl font-semibold text-[#01f2f2] sm:text-4xl mb-12">
+    <div className="relative mx-auto max-w-[1520px] pb-20 lg:pb-30 px-5 lg:px-20">
+      <div className="text-center pt-[20px] lg:pt-[100px]">
+        <h2
+          id="enquire"
+          className="font-title text-3xl font-semibold text-[#01f2f2] sm:text-4xl mb-12 pt-24 lg:pt-30"
+        >
           Enquire Now
         </h2>
       </div>
@@ -154,7 +157,7 @@ export default function ContactForm() {
           <button
             type="button"
             onClick={handleSubmit}
-            className="rounded-full bg-[#F37406] px-8 py-3 text-base font-semibold text-white shadow-lg transition hover:bg-[#f2df79] hover:text-[#040dbf] hover:shadow-xl hover:shadow-[#F37406]/50 active:scale-95"
+            className="rounded-lg bg-[#F37406] px-8 py-3 text-base font-semibold text-white shadow-lg transition hover:bg-[#f2df79] hover:text-[#040dbf] hover:shadow-xl hover:shadow-[#F37406]/50 active:scale-95"
           >
             Submit
           </button>

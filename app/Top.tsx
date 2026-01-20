@@ -13,7 +13,7 @@ export default function HeroSection({ onRegisterClick }: HeroSectionProps) {
 
       <div
         id="top"
-        className="max-w-[1520px] mx-auto px-6 lg:grid lg:grid-cols-2 gap-12 lg:items-center"
+        className="max-w-[1520px] mx-auto px-6 lg:grid lg:grid-cols-2 gap-12 lg:items-center lg:-mt-20"
       >
         {/* 左边 - 手机图片占位 (仅桌面端) */}
         <div className="relative xl:-left-[50%] top-[15%] lg:-left-[120%] hidden lg:block">
@@ -29,25 +29,26 @@ export default function HeroSection({ onRegisterClick }: HeroSectionProps) {
           {/* 移动端内容 */}
           <div className="lg:hidden">
             {/* 移动端标题 */}
-            <h1 className="text-4xl md:text-6xl font-regular mb-6 flex flex-col gap-2 text-center pt-20">
-              <span className="font-title text-[#01f2f2]">COPY TRADING</span>
-              <span className="font-title text-2xl md:text-5xl text-white italic">
-                with Blackwell Invest
-              </span>
-            </h1>
+            <div className="relative flex flex-col items-center mb-8">
+              {/* h1 - 在 regular 前面 */}
+              <h1 className="text-5xl md:text-8xl font-regular mb-6 flex flex-col gap-2 text-center pt-20 z-10 relative">
+                <span className="font-title text-[#01f2f2]">COPY TRADING</span>
+                <span className="font-title text-3xl md:text-6xl text-white italic">
+                  with Blackwell Invest
+                </span>
+              </h1>
 
-            {/* PlayStore + 装饰图 */}
-            <div className="flex justify-center mb-8">
-              <div className="relative inline-block">
-                <div className="relative z-10">
-                  <PlayStore />
-                </div>
-                <img
-                  src="/images/top/regular.png"
-                  alt="decoration"
-                  className="absolute -bottom-2 -right-9 translate-x-1/2 translate-y-1/2 w-30 z-0 pointer-events-none"
-                />
+              {/* PlayStore */}
+              <div className="relative z-10">
+                <PlayStore />
               </div>
+
+              {/* 装饰图 regular.png */}
+              <img
+                src="/images/top/regular.png"
+                alt="decoration"
+                className="absolute md:bottom-[-25px] md:right-[10px] bottom-[10px] right-[-10px] w-[200px] md:w-[300px] z-0 pointer-events-none"
+              />
             </div>
 
             {/* 移动端手机图片 */}

@@ -61,9 +61,12 @@ export default function Choose() {
   const currentTab = tabs.find((tab) => tab.id === activeTab)
 
   return (
-    <div className="mx-auto max-w-[1520px] px-5 lg:px-20">
-      <div className="text-center mt-6 mb-14">
-        <h2 className="font-title text-3xl font-semibold text-[#01f2f2] sm:text-4xl">
+    <div className="mx-auto max-w-[1520px] px-5 lg:px-20 pb-24">
+      <div className="text-center pt-[20px] lg:pt-2 mb-14">
+        <h2
+          id="trading"
+          className="font-title text-3xl font-semibold text-[#01f2f2] sm:text-4xl pt-24 lg:pt-30"
+        >
           Navigate Our App in 5 Clicks
         </h2>
       </div>

@@ -15,10 +15,10 @@ export default function Matching() {
 
   return (
     <div className="mx-auto max-w-[1520px] px-5 lg:px-0">
-      <div className="text-center">
+      <div className="text-center pt-[20px] lg:pt-2">
         <h2
           id="matching"
-          className="font-title text-3xl font-semibold text-[#01f2f2] sm:text-4xl py-14 lg:py-0"
+          className="font-title text-3xl font-semibold text-[#01f2f2] sm:text-4xl pb-5 pt-24 lg:pt-24"
         >
           Fast Matching
         </h2>
