@@ -53,7 +53,7 @@ export default function StepSlideshow() {
   ]
 
   return (
-    <div className="mx-auto">
+    <div className="mx-auto max-w-[1520px] pb-16 px-5 lg:px-0">
       <div className="text-center mt-6 mb-8">
         <h2 className="font-title text-3xl font-semibold text-[#01f2f2] sm:text-4xl">
           How to Link MT4 Account
@@ -166,7 +166,7 @@ export default function StepSlideshow() {
                   <img
                     src={slide.image}
                     alt={slide.title}
-                    className="w-full h-auto lg:h-full lg:object-contain"
+                    className="w-auto md:h-[50vh] h-[40vh] lg:w-full lg:h-full lg:object-contain"
                   />
                 </div>
                 <div className="flex flex-col items-center justify-center lg:flex-1 mt-4">

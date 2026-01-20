@@ -21,7 +21,7 @@ type Props = {
   onSwitchMode: () => void
   onAuthSuccess: (
     message: string,
-    user?: { firstName?: string; lastName?: string }
+    user?: { firstName?: string; lastName?: string },
   ) => void
 }
 
@@ -112,7 +112,7 @@ export function AuthModal({
           `Hi ${newUser.firstName || "User"} ${
             newUser.lastName || ""
           }, welcome to Blackwell, please verify your email immediately.`,
-          newUser
+          newUser,
         )
         resetSignup()
       } else {
@@ -122,7 +122,7 @@ export function AuthModal({
         }`.trim()
         onAuthSuccess(
           `Login successful! Welcome to Blackwell, ${fullName}`,
-          user
+          user,
         )
         resetLogin()
       }
@@ -130,7 +130,7 @@ export function AuthModal({
     } catch (error) {
       console.error("Auth error:", error)
       showToast.error(
-        error instanceof Error ? error.message : "Something went wrong"
+        error instanceof Error ? error.message : "Something went wrong",
       )
     } finally {
       setLoading(false)
@@ -148,7 +148,7 @@ export function AuthModal({
         `${
           provider === "google" ? "Google" : "Facebook"
         } login successful! Welcome, ${fullName}`,
-        userData
+        userData,
       )
       onClose()
     } catch (error) {
@@ -160,7 +160,7 @@ export function AuthModal({
 
   return (
     <div
-      className="fixed inset-0 z-[60] flex items-center justify-center bg-black/70 p-4 backdrop-blur-md"
+      className="fixed inset-0 z-[60] flex items-center justify-center bg-black/70 px-5 lg:px-0 backdrop-blur-md"
       onClick={onClose}
     >
       <div
@@ -374,9 +374,7 @@ export function AuthModal({
               />
               {(isSignup ? signupErrors.email : loginErrors.email) && (
                 <p className="mt-1 text-xs text-red-400">
-                  {(
-                    isSignup ? signupErrors.email : loginErrors.email
-                  )?.message}
+                  {(isSignup ? signupErrors.email : loginErrors.email)?.message}
                 </p>
               )}
             </div>
@@ -402,9 +400,10 @@ export function AuthModal({
               />
               {(isSignup ? signupErrors.password : loginErrors.password) && (
                 <p className="mt-1 text-xs text-red-400">
-                  {(
-                    isSignup ? signupErrors.password : loginErrors.password
-                  )?.message}
+                  {
+                    (isSignup ? signupErrors.password : loginErrors.password)
+                      ?.message
+                  }
                 </p>
               )}
             </div>
@@ -441,8 +440,8 @@ export function AuthModal({
               {isBusy
                 ? "Processing..."
                 : mode === "signup"
-                ? "Register"
-                : "Login"}
+                  ? "Register"
+                  : "Login"}
             </button>
           </form>
 

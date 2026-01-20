@@ -17,7 +17,7 @@ export default function TradingTabs() {
 
   const handleAuthSuccess = (
     message: string,
-    user?: { firstName?: string; lastName?: string }
+    user?: { firstName?: string; lastName?: string },
   ) => {
     showToast.success(message)
     setAuthModalOpen(false)
@@ -38,11 +38,11 @@ export default function TradingTabs() {
         onAuthSuccess={handleAuthSuccess}
       />
 
-      <div className="relative mx-auto max-w-[1520px] px-6 pb-20 lg:pb-30">
+      <div className="relative mx-auto max-w-[1520px] pb-20 lg:pb-30 px-5 lg:px-0">
         <div className="text-center pt-[20px] lg:pt-[100px] mb-14">
           <h2
             id="choose"
-            className="font-title text-3xl font-semibold text-[#01f2f2] sm:text-4xl pt-24 lg:pt-24"
+            className="font-title text-3xl font-semibold text-[#01f2f2] sm:text-4xl pt-24 lg:pt-30"
           >
             Why Choose Us?
           </h2>

@@ -38,7 +38,7 @@ export default function InteractiveSteps() {
   ]
 
   return (
-    <div className="relative mx-auto max-w-[1520px] px-6 pt-20 lg:py-20">
+    <div className="relative mx-auto max-w-[1520px] pt-20 lg:py-20 px-5 lg:px-0">
       <div className="text-center pt-[20px] lg:pt-[100px] mb-14">
         <h2
           id="tradelikepro"

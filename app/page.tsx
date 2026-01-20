@@ -11,6 +11,8 @@ import TradingTabs from "@/app/Trading"
 import Choose from "@/app/Choose"
 import LinkAccount from "@/app/LinkAccount"
 import TradLikePro from "@/app/TradeLikePro"
+import Analysis from "@/app/Analysis"
+import Matching from "@/app/Matching"
 
 const palette = {
   background: "#3A53BA",
@@ -193,7 +195,7 @@ export default function Page() {
 
   const handleAuthSuccess = (
     message: string,
-    user?: { firstName?: string; lastName?: string }
+    user?: { firstName?: string; lastName?: string },
   ) => {
     showToast.success(message)
     setAuthModalOpen(false)
@@ -223,7 +225,7 @@ export default function Page() {
       </div>
 
       <header className="fixed inset-x-0 top-0 z-50 bg-[#112A4D] backdrop-blur">
-        <div className="mx-auto flex max-w-[1520px] items-center px-6 pt-5">
+        <div className="mx-auto flex max-w-[1520px] items-center pt-5">
           <Link
             href="#top"
             className="mb-3"
@@ -233,13 +235,10 @@ export default function Page() {
               setMenuOpen(false)
             }}
           >
-            <Image
+            <img
               src="/images/navigation/logo.png"
               alt="logo"
-              width={150}
-              height={34}
-              priority
-              className="h-auto"
+              className="h-auto w-[150px] h-[34px]"
             />
           </Link>
 
@@ -324,11 +323,9 @@ export default function Page() {
                 onClick={() => setUserMenuOpen((open) => !open)}
                 className="flex h-10 w-10 mb-3 items-center justify-center rounded-full border-2 border-white/30 bg-white/10 transition hover:border-[#F37406] hover:bg-white/20 hover:scale-105"
               >
-                <Image
+                <img
                   src={"/images/navigation/avatar_white.png"}
                   alt="User avatar"
-                  width={44}
-                  height={44}
                   className="h-8 w-8 object-cover"
                 />
               </button>
@@ -501,7 +498,7 @@ export default function Page() {
       <main className="relative z-10 pt-20 flex-1">
         <section
           id="top"
-          className="mx-auto flex max-w-[1520px] flex-col gap-12 px-6 pb-24 pt-8 lg:flex-row lg:items-center lg:pt-16"
+          className="mx-auto flex max-w-[1520px] flex-col gap-12 pb-24 pt-8 lg:flex-row lg:items-center lg:pt-16"
         >
           <div className="flex-1 space-y-8">
             <div className="inline-flex items-center gap-3 rounded-full border border-[#f2df79]/30 bg-[#01f2f2]/10 px-4 py-2 text-sm text-[#01f2f2] backdrop-blur">
@@ -585,16 +582,16 @@ export default function Page() {
                           {idx === 0
                             ? "58%"
                             : idx === 1
-                            ? "23%"
-                            : idx === 2
-                            ? "14%"
-                            : "5%"}
+                              ? "23%"
+                              : idx === 2
+                                ? "14%"
+                                : "5%"}
                         </p>
                         <p className="text-xs text-[#040dbf]">
                           Share of logins
                         </p>
                       </div>
-                    )
+                    ),
                   )}
                 </div>
 
@@ -635,24 +632,28 @@ export default function Page() {
           </div>
         </section>
 
+        <section>
+          <Matching />
+        </section>
+
+        <section>
+          <Analysis />
+        </section>
+
         <section className="relative w-full bg-[url('/images/background/bg-1.png')] bg-contain bg-top bg-no-repeat">
           <TradLikePro />
         </section>
 
-        <section id="link" className="px-6 py-20">
-          <div className="mx-auto max-w-[1520px] pb-16">
-            <LinkAccount />
-          </div>
+        <section id="link" className="py-20">
+          <LinkAccount />
         </section>
 
         <section className="relative w-full bg-[url('/images/background/bg-2.png')] bg-contain bg-top bg-no-repeat">
           <Choose />
         </section>
 
-        <section id="trading" className="px-6 py-16">
-          <div className="mx-auto max-w-[1520px]">
-            <TradingTabs />
-          </div>
+        <section id="trading" className="py-16">
+          <TradingTabs />
         </section>
 
         <section
@@ -746,8 +747,8 @@ export default function Page() {
               </p>
             </div>
             <div className="flex items-center gap-6 text-white/80">
-              <a href="#features" className="transition hover:text-[#F37406]">
-                Product
+              <a href="#analysis" className="transition hover:text-[#F37406]">
+                Analysis
               </a>
               <a
                 href="#tradelikepro"
