@@ -18,6 +18,12 @@ export default function TradingTabs() {
   }) as unknown as Card[]
 
   useEffect(() => {
+    // 语言切换 / cards 变化时，重置动画状态
+    setVisibleCards(new Set())
+    cardsRef.current = []
+  }, [cards.length])
+
+  useEffect(() => {
     const observers = cardsRef.current.map((card, index) => {
       if (!card) return null
 
@@ -43,7 +49,7 @@ export default function TradingTabs() {
     return () => {
       observers.forEach((observer) => observer?.disconnect())
     }
-  }, [cards.length])
+  }, [cards])
 
   return (
     <div className="relative mx-auto max-w-[1520px] px-5 lg:px-20">
@@ -58,7 +64,7 @@ export default function TradingTabs() {
       <div className="space-y-4">
         {cards.map((card, index) => (
           <div
-            key={card.title}
+            key={index}
             ref={(el) => {
               cardsRef.current[index] = el
             }}
