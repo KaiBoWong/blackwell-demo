@@ -1,9 +1,10 @@
 "use client"
 
-import PlayStore from "@/components/Store"
-import { useState } from "react"
+import { useTranslation } from "@/hooks/useTranslation"
 
 export default function Analysis() {
+  const { t } = useTranslation()
+
   return (
     <div className="mx-auto max-w-[1520px] px-5 lg:px-0 pb-10 lg:pb-10">
       <div className="text-center mb-14">
@@ -11,11 +12,10 @@ export default function Analysis() {
           id="analysis"
           className="font-title text-3xl font-semibold text-[#01f2f2] sm:text-4xl pt-24 lg:pt-24 mb-6"
         >
-          Easy Analysis
+          {t("analysis.title")}
         </h2>
         <p className="font-subtitle text-lg lg:text-xl text-[#f2df79] font-bold mb-20">
-          Instant clarity on the Masters' profile. Get a snapshoot of their
-          trade history, profitability, risk, and portfolio all in one place.
+          {t("analysis.subtitle")}
         </p>
         <div className="flex justify-center">
           <div className="relative w-[40vw] max-w-[320px] lg:w-[250px] aspect-[9/19]">

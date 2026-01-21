@@ -2,40 +2,23 @@
 
 import PlayStore from "@/components/Store"
 import { useState } from "react"
+import { useTranslation } from "@/hooks/useTranslation"
 
 export default function InteractiveSteps() {
   const [activeStep, setActiveStep] = useState(0)
+  const { t } = useTranslation()
 
-  const steps = [
-    {
-      id: 1,
-      number: "1",
-      title: "Install our app, ”Blackwell Invest“",
-      image: "/images/guide/guide-1.png",
-      color: "border-[#FFD700]", // 金色
-    },
-    {
-      id: 2,
-      number: "2",
-      title: "Choose a signal Master and click ”Copy”",
-      image: "/images/guide/guide-2.png",
-      color: "border-[#F37406]", // 橙色
-    },
-    {
-      id: 3,
-      number: "3",
-      title: "Set your trade size preferences",
-      image: "/images/guide/guide-3.png",
-      color: "border-[#FFD700]", // 金色
-    },
-    {
-      id: 4,
-      number: "4",
-      title: "Click ”Agree and Copy“",
-      image: "/images/guide/guide-4.png",
-      color: "border-[#F37406]", // 橙色
-    },
-  ]
+  const stepTitles = t("tradeSteps.steps", {
+    returnObjects: true,
+  }) as unknown as string[]
+
+  const steps = stepTitles.map((title, index) => ({
+    id: index + 1,
+    number: `${index + 1}`,
+    title,
+    image: `/images/guide/guide-${index + 1}.png`,
+    color: index % 2 === 0 ? "border-[#FFD700]" : "border-[#F37406]",
+  }))
 
   return (
     <div className="relative mx-auto max-w-[1520px] pt-20 lg:py-20 px-5 lg:px-20">
@@ -44,7 +27,7 @@ export default function InteractiveSteps() {
           id="tradelikepro"
           className="font-title text-3xl font-semibold text-[#01f2f2] sm:text-4xl pt-24 lg:pt-30"
         >
-          Trade Like a Pro in Minutes
+          {t("tradeSteps.title")}
         </h2>
       </div>
 

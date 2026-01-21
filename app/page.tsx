@@ -1,7 +1,6 @@
 "use client"
 
 import Link from "next/link"
-import Image from "next/image"
 import { useEffect, useRef, useState, useSyncExternalStore } from "react"
 import { clearUser, getUser, subscribe } from "../store/user"
 import { AuthModal, type AuthMode } from "./auth-modal"
@@ -15,6 +14,8 @@ import Analysis from "@/app/Analysis"
 import Matching from "@/app/Matching"
 import HeroSection from "@/app/Top"
 import RegisterButton from "@/components/RegisterButton"
+import { useTranslation } from "@/hooks/useTranslation"
+import type { Locale } from "@/i18n/i18n"
 
 const palette = {
   background: "#3A53BA",
@@ -23,6 +24,12 @@ const palette = {
   gold: "#f2df79",
   orange: "#F37406",
 }
+
+const languageOptions: { code: Locale; label: string }[] = [
+  { code: "en", label: "EN" },
+  { code: "ms", label: "MS" },
+  { code: "zh", label: "中文" },
+]
 
 function MenuIcon({ open }: { open: boolean }) {
   return (
@@ -64,6 +71,7 @@ export default function Page() {
   const userMenuRef = useRef<HTMLDivElement | null>(null)
   const [authModalOpen, setAuthModalOpen] = useState(false)
   const [authMode, setAuthMode] = useState<AuthMode>("login")
+  const { t, setLanguage, locale } = useTranslation()
   const currentUser = useSyncExternalStore(subscribe, getUser, getUser)
   const isLoggedIn = Boolean(currentUser)
 
@@ -128,9 +136,9 @@ export default function Page() {
     const name =
       currentUser && "firstName" in currentUser && currentUser.firstName
         ? currentUser.firstName
-        : "User"
+        : t("auth.genericUser")
     clearUser()
-    showToast.success(`Bye, ${name}! See you next time.`)
+    showToast.success(t("auth.success.logout", { name }))
     setUserMenuOpen(false)
   }
 
@@ -185,10 +193,10 @@ export default function Page() {
 
           <div className="hidden lg:flex flex flex-col text-center xl:ml-30 lg:ml-10 mb-3">
             <span className="text-[12px] font-subtitle uppercase text-white">
-              Promotion
+              {t("header.promotion")}
             </span>
             <span className="text-[12px] font-subtitle uppercase text-white">
-              ends in
+              {t("header.endsIn")}
             </span>
           </div>
 
@@ -200,7 +208,7 @@ export default function Page() {
                   {String(timeLeft.days).padStart(2, "0")}
                 </div>
                 <div className="text-[10px] uppercase tracking-wider text-white mb-1">
-                  Days
+                  {t("header.days")}
                 </div>
               </div>
 
@@ -212,7 +220,7 @@ export default function Page() {
                   {String(timeLeft.hours).padStart(2, "0")}
                 </div>
                 <div className="text-[10px] uppercase tracking-wider text-white mb-1">
-                  Hours
+                  {t("header.hours")}
                 </div>
               </div>
 
@@ -224,7 +232,7 @@ export default function Page() {
                   {String(timeLeft.minutes).padStart(2, "0")}
                 </div>
                 <div className="text-[10px] uppercase tracking-wider text-white mb-1">
-                  Minutes
+                  {t("header.minutes")}
                 </div>
               </div>
 
@@ -236,13 +244,28 @@ export default function Page() {
                   {String(timeLeft.seconds).padStart(2, "0")}
                 </div>
                 <div className="text-[10px] uppercase tracking-wider text-white mb-1">
-                  Seconds
+                  {t("header.seconds")}
                 </div>
               </div>
             </div>
           </div>
 
           <div className="flex items-center gap-6 ml-auto">
+            <select
+              value={locale}
+              onChange={(event) => setLanguage(event.target.value as Locale)}
+              className="rounded-lg mb-3 border border-white/20 bg-white/10 px-1 lg:px-3 py-2 ml-4 lg:ml-0 text-xs font-semibold text-white outline-none transition hover:border-[#F37406] hover:bg-white/20"
+            >
+              {languageOptions.map((lang) => (
+                <option
+                  key={lang.code}
+                  value={lang.code}
+                  className="bg-[#1a2f52] text-[#0b2a63]"
+                >
+                  {lang.label}
+                </option>
+              ))}
+            </select>
             <div className="hidden items-center gap-3 lg:flex mb-3">
               <button
                 type="button"
@@ -252,7 +275,7 @@ export default function Page() {
                   openAuth("signup")
                 }}
               >
-                REGISTER NOW
+                {t("header.registerCta")}
               </button>
             </div>
 
@@ -287,10 +310,10 @@ export default function Page() {
                       </div>
                       <div>
                         <p className="text-sm font-semibold text-[#f2df79]">
-                          Account
+                          {t("header.account")}
                         </p>
                         <p className="text-xs text-[#01f2f2]/80">
-                          Manage your profile
+                          {t("header.manageProfile")}
                         </p>
                       </div>
                     </div>
@@ -329,7 +352,7 @@ export default function Page() {
                           )}
                         </svg>
                         <span className="text-[#f2df79]">
-                          {isLoggedIn ? "Logout" : "Login"}
+                          {isLoggedIn ? t("common.logout") : t("common.login")}
                         </span>
                       </span>
                       <span className="text-[#F37406] group-hover:translate-x-1 group-hover:scale-110 transition-all">
@@ -367,7 +390,7 @@ export default function Page() {
           <div className="space-y-4 px-4 pb-6 pt-4">
             <div className="rounded-2xl border border-white/15 bg-white/5 px-4 py-3 text-center text-white">
               <p className="text-[11px] uppercase tracking-[0.2em] text-white">
-                Promo ends in
+                {t("header.promoEnds")}
               </p>
               <div className="mt-2 flex items-end justify-center gap-2 font-subtitle">
                 <div className="text-center">
@@ -375,7 +398,7 @@ export default function Page() {
                     {String(timeLeft.days).padStart(2, "0")}
                   </div>
                   <div className="text-[10px] uppercase tracking-wide text-white/80">
-                    Days
+                    {t("header.days")}
                   </div>
                 </div>
                 <span className="text-xl text-white pb-3">:</span>
@@ -384,7 +407,7 @@ export default function Page() {
                     {String(timeLeft.hours).padStart(2, "0")}
                   </div>
                   <div className="text-[10px] uppercase tracking-wide text-white/80">
-                    Hours
+                    {t("header.hours")}
                   </div>
                 </div>
                 <span className="text-xl text-white pb-3">:</span>
@@ -393,7 +416,7 @@ export default function Page() {
                     {String(timeLeft.minutes).padStart(2, "0")}
                   </div>
                   <div className="text-[10px] uppercase tracking-wide text-white/80">
-                    Minutes
+                    {t("header.minutes")}
                   </div>
                 </div>
                 <span className="text-xl text-white pb-3">:</span>
@@ -402,7 +425,7 @@ export default function Page() {
                     {String(timeLeft.seconds).padStart(2, "0")}
                   </div>
                   <div className="text-[10px] uppercase tracking-wide text-white/80">
-                    Seconds
+                    {t("header.seconds")}
                   </div>
                 </div>
               </div>
@@ -415,7 +438,7 @@ export default function Page() {
                 setMenuOpen(false)
               }}
             >
-              Register Now
+              {t("common.registerNow")}
             </button>
             <button
               type="button"
@@ -429,7 +452,7 @@ export default function Page() {
               }}
               className="flex w-full items-center justify-between rounded-xl border border-white/20 bg-white/5 px-4 py-3 text-sm font-semibold text-white transition hover:bg-white/10"
             >
-              {isLoggedIn ? "Logout" : "Login"}
+              {isLoggedIn ? t("common.logout") : t("common.login")}
               <span className="text-[#F37406]">{isLoggedIn ? "↘" : "↗"}</span>
             </button>
           </div>
@@ -479,12 +502,9 @@ export default function Page() {
             {/* 标题 + 描述 */}
             <div className="space-y-2">
               <h3 className="text-xl font-title font-bold text-white">
-                Blackwell Global
+                {t("footer.title")}
               </h3>
-              <p className="text-white/70 text-sm">
-                Professional trading authentication platform. Trade smarter,
-                faster, and more securely.
-              </p>
+              <p className="text-white/70 text-sm">{t("footer.description")}</p>
             </div>
 
             {/* 链接导航 - 垂直显示 */}
@@ -493,43 +513,43 @@ export default function Page() {
                 href="#matching"
                 className="text-white/80 text-sm transition hover:text-[#F37406]"
               >
-                Matching
+                {t("nav.matching")}
               </a>
               <a
                 href="#analysis"
                 className="text-white/80 text-sm transition hover:text-[#F37406]"
               >
-                Analysis
+                {t("nav.analysis")}
               </a>
               <a
                 href="#tradelikepro"
                 className="text-white/80 text-sm transition hover:text-[#F37406]"
               >
-                Quick Start
+                {t("nav.quickStart")}
               </a>
               <a
                 href="#link"
                 className="text-white/80 text-sm transition hover:text-[#F37406]"
               >
-                MT4 Link
+                {t("nav.link")}
               </a>
               <a
                 href="#choose"
                 className="text-white/80 text-sm transition hover:text-[#F37406]"
               >
-                Why Choose Us
+                {t("nav.choose")}
               </a>
               <a
                 href="#trading"
                 className="text-white/80 text-sm transition hover:text-[#F37406]"
               >
-                App Navigation
+                {t("nav.trading")}
               </a>
               <a
                 href="#enquire"
                 className="text-white/80 text-sm transition hover:text-[#F37406]"
               >
-                Enquire
+                {t("nav.enquire")}
               </a>
             </div>
           </div>
@@ -538,37 +558,36 @@ export default function Page() {
           <div className="hidden lg:flex items-center justify-between">
             <div className="space-y-3">
               <h3 className="text-2xl font-title font-bold text-white">
-                Blackwell Auth
+                {t("footer.title")}
               </h3>
               <p className="text-white/70 max-w-lg">
-                Professional trading authentication platform. Trade smarter,
-                faster, and more securely.
+                {t("footer.description")}
               </p>
             </div>
             <div className="flex items-center gap-6 text-white/80">
               <a href="#matching" className="transition hover:text-[#F37406]">
-                Matching
+                {t("nav.matching")}
               </a>
               <a href="#analysis" className="transition hover:text-[#F37406]">
-                Analysis
+                {t("nav.analysis")}
               </a>
               <a
                 href="#tradelikepro"
                 className="transition hover:text-[#F37406]"
               >
-                Quick Start
+                {t("nav.quickStart")}
               </a>
               <a href="#link" className="transition hover:text-[#F37406]">
-                MT4 Link
+                {t("nav.link")}
               </a>
               <a href="#choose" className="transition hover:text-[#F37406]">
-                Why Choose Us
+                {t("nav.choose")}
               </a>
               <a href="#trading" className="transition hover:text-[#F37406]">
-                App Navigation
+                {t("nav.trading")}
               </a>
               <a href="#enquire" className="transition hover:text-[#F37406]">
-                Enquire
+                {t("nav.enquire")}
               </a>
             </div>
           </div>
@@ -577,14 +596,14 @@ export default function Page() {
 
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <p className="text-sm text-white/60 font-subtitle">
-              © {new Date().getFullYear()} Blackwell Auth. All rights reserved.
+              © {new Date().getFullYear()} Blackwell Auth. {t("footer.rights")}
             </p>
             <div className="flex flex-wrap items-center gap-4 sm:gap-6 text-white/60">
               <a href="#privacy" className="hover:text-[#01f2f2] transition">
-                Privacy Policy
+                {t("footer.privacy")}
               </a>
               <a href="#terms" className="hover:text-[#01f2f2] transition">
-                Terms of Service
+                {t("footer.terms")}
               </a>
               <button
                 onClick={(e) => {
@@ -593,7 +612,7 @@ export default function Page() {
                 }}
                 className="group inline-flex items-center gap-2 hover:text-[#FFD700] transition"
               >
-                <span>Back to top</span>
+                <span>{t("common.backToTop")}</span>
                 <span className="transform group-hover:-translate-y-1 transition-transform">
                   ↑
                 </span>
@@ -605,7 +624,7 @@ export default function Page() {
 
       <button
         type="button"
-        aria-label="Back to top"
+        aria-label={t("common.backToTop")}
         onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
         className={`fixed bottom-6 right-6 z-50 rounded-full bg-gradient-to-br from-[#f2df79] via-[#F37406] to-[#01f2f2] p-3 text-[#040dbf] shadow-[0_18px_60px_-28px_rgba(243,116,6,0.65)] transition-all duration-300 hover:scale-105 ${
           showBackToTop

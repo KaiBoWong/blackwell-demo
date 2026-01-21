@@ -1,65 +1,33 @@
 "use client"
 
 import { Swiper, SwiperSlide } from "swiper/react"
-import { Navigation, Pagination, Autoplay } from "swiper/modules"
+import { Pagination, Autoplay } from "swiper/modules"
 import "swiper/css"
 import "swiper/css/navigation"
 import "swiper/css/pagination"
 import RegisterButton from "@/components/RegisterButton"
+import { useTranslation } from "@/hooks/useTranslation"
 
 export default function StepSlideshow() {
-  const slides = [
-    {
-      id: 1,
-      image: "/images/register/step-1.png",
-      title: "Install our app, “Blackwell Invest",
-    },
-    {
-      id: 2,
-      image: "/images/register/step-2.png",
-      title: "Login OR create a new account",
-    },
-    {
-      id: 3,
-      image: "/images/register/step-3.png",
-      title: "Click “Account” ",
-    },
-    {
-      id: 4,
-      image: "/images/register/step-4.png",
-      title: "Click “Link an account”",
-    },
-    {
-      id: 5,
-      image: "/images/register/step-5.png",
-      title: 'Select “BlackwellGlobalAsia-Live” server"',
-    },
-    {
-      id: 6,
-      image: "/images/register/step-6.png",
-      title:
-        "Fill in your Blackwell Global trading account OR create a new account ",
-    },
-    {
-      id: 7,
-      image: "/images/register/step-7.png",
-      title: "Click “Copy Trades” ",
-    },
-    {
-      id: 8,
-      image: "/images/register/step-8.png",
-      title: "Click “Done”",
-    },
-  ]
+  const { t } = useTranslation()
+  const steps = t("linkAccount.steps", {
+    returnObjects: true,
+  })
+
+  const slides = (Array.isArray(steps) ? steps : []).map((title, index) => ({
+    id: index + 1,
+    image: `/images/register/step-${index + 1}.png`,
+    title: String(title),
+  }))
 
   return (
     <div className="mx-auto max-w-[1520px] px-5 lg:px-20">
-      <div className="text-center pt-[20px] lg:pt-2 mb-8">
+      <div className="text-center pt-[20px] lg:pt-2 mb-16">
         <h2
           id="link"
           className="font-title text-3xl font-semibold text-[#01f2f2] sm:text-4xl pt-24 lg:pt-30"
         >
-          How to Link MT4 Account
+          {t("linkAccount.title")}
         </h2>
       </div>
       <Swiper
@@ -177,7 +145,7 @@ export default function StepSlideshow() {
                     {slide.title}
                   </h3>
                   <span className="text-white/60 text-base mt-2">
-                    Step {index + 1}
+                    {t("linkAccount.stepLabel", { index: index + 1 })}
                   </span>
                 </div>
               </div>

@@ -1,9 +1,13 @@
+"use client"
+
 import { useState } from "react"
 import Image from "next/image"
 import PlayStore from "@/components/Store"
+import { useTranslation } from "@/hooks/useTranslation"
 
 export default function Choose() {
   const [activeTab, setActiveTab] = useState("activity")
+  const { t } = useTranslation()
 
   const tabs = [
     {
@@ -11,9 +15,8 @@ export default function Choose() {
       icon: "/images/navigate/icon1.png",
       activeIcon: "/images/navigate/icon1-blue.png",
       content: {
-        title: "Discover",
-        description:
-          "Explore all the investment Masters available on Blackwell Invest. Dive into their profiles and analyse their profitability at a glance.",
+        title: t("trading.tabs.discover.title"),
+        description: t("trading.tabs.discover.description"),
       },
     },
     {
@@ -21,9 +24,8 @@ export default function Choose() {
       icon: "/images/navigate/icon2.png",
       activeIcon: "/images/navigate/icon2-blue.png",
       content: {
-        title: "Activity",
-        description:
-          "See the past trades made by the signals you are copying from the last 30 days or track their open positions. Monitor their strategy, and make informed decisions with timely updates of the trades shaping your portfolio.",
+        title: t("trading.tabs.activity.title"),
+        description: t("trading.tabs.activity.description"),
       },
     },
     {
@@ -31,9 +33,8 @@ export default function Choose() {
       icon: "/images/navigate/icon3.png",
       activeIcon: "/images/navigate/icon3-blue.png",
       content: {
-        title: "Trade",
-        description:
-          "Seamlessly trade oil CFDs, indices, and currency pairs with ease.",
+        title: t("trading.tabs.trade.title"),
+        description: t("trading.tabs.trade.description"),
       },
     },
     {
@@ -41,9 +42,8 @@ export default function Choose() {
       icon: "/images/navigate/icon4.png",
       activeIcon: "/images/navigate/icon4-blue.png",
       content: {
-        title: "Positions",
-        description:
-          "Easily track the status of all your trades and monitor your account metrics in real-time.",
+        title: t("trading.tabs.positions.title"),
+        description: t("trading.tabs.positions.description"),
       },
     },
     {
@@ -51,9 +51,8 @@ export default function Choose() {
       icon: "/images/navigate/icon5.png",
       activeIcon: "/images/navigate/icon5-blue.png",
       content: {
-        title: "Account",
-        description:
-          "Access detailed information about your trading account, monitor copier drawdown levels, assess your profitability, and keep track of your trade performance – all in one place!",
+        title: t("trading.tabs.account.title"),
+        description: t("trading.tabs.account.description"),
       },
     },
   ]
@@ -67,7 +66,7 @@ export default function Choose() {
           id="trading"
           className="font-title text-3xl font-semibold text-[#01f2f2] sm:text-4xl pt-24 lg:pt-30"
         >
-          Navigate Our App in 5 Clicks
+          {t("trading.title")}
         </h2>
       </div>
       {/* Tabs Navigation */}
@@ -84,7 +83,7 @@ export default function Choose() {
           >
             <img
               src={activeTab === tab.id ? tab.activeIcon : tab.icon}
-              alt={tab.id}
+              alt={tab.content.title}
               className="w-16 h-16 mb-1 object-cover"
             />
           </button>
@@ -109,37 +108,42 @@ export default function Choose() {
           <div className="flex-shrink-0 self-end md:self-end">
             {activeTab === "discover" && (
               <img
+                key="discover"
                 src="/images/reason/reason-1.png"
-                alt="Discover"
-                className="w-full h-100 object-contain rounded-xl"
+                alt={tabs.find((tab) => tab.id === "discover")?.content.title}
+                className="w-full h-100 object-contain rounded-xl animate-image-enter"
               />
             )}
             {activeTab === "activity" && (
               <img
+                key="activity"
                 src="/images/reason/reason-2.png"
-                alt="Activity"
-                className="w-full h-100 object-contain rounded-xl"
+                alt={tabs.find((tab) => tab.id === "activity")?.content.title}
+                className="w-full h-100 object-contain rounded-xl animate-image-enter"
               />
             )}
             {activeTab === "trade" && (
               <img
+                key="trade"
                 src="/images/reason/reason-3.png"
-                alt="Trade"
-                className="w-full h-100 object-contain rounded-xl"
+                alt={tabs.find((tab) => tab.id === "trade")?.content.title}
+                className="w-full h-100 object-contain rounded-xl animate-image-enter"
               />
             )}
             {activeTab === "positions" && (
               <img
+                key="positions"
                 src="/images/reason/reason-4.png"
-                alt="Positions"
-                className="w-full h-100 object-contain rounded-xl"
+                alt={tabs.find((tab) => tab.id === "positions")?.content.title}
+                className="w-full h-100 object-contain rounded-xl animate-image-enter"
               />
             )}
             {activeTab === "account" && (
               <img
+                key="account"
                 src="/images/reason/reason-5.png"
-                alt="Account"
-                className="w-full h-100 object-contain rounded-xl"
+                alt={tabs.find((tab) => tab.id === "account")?.content.title}
+                className="w-full h-100 object-contain rounded-xl animate-image-enter"
               />
             )}
           </div>
@@ -156,37 +160,42 @@ export default function Choose() {
 
           {activeTab === "discover" && (
             <img
+              key="discover-mobile"
               src="/images/reason/reason-1.png"
-              alt="Discover"
-              className="w-full h-auto object-contain rounded-xl"
+              alt={tabs.find((tab) => tab.id === "discover")?.content.title}
+              className="w-full h-auto object-contain rounded-xl animate-image-enter"
             />
           )}
           {activeTab === "activity" && (
             <img
+              key="activity-mobile"
               src="/images/reason/reason-2.png"
-              alt="Activity"
-              className="w-full h-auto object-contain rounded-xl"
+              alt={tabs.find((tab) => tab.id === "activity")?.content.title}
+              className="w-full h-auto object-contain rounded-xl animate-image-enter"
             />
           )}
           {activeTab === "trade" && (
             <img
+              key="trade-mobile"
               src="/images/reason/reason-3.png"
-              alt="Trade"
-              className="w-full h-auto object-contain rounded-xl"
+              alt={tabs.find((tab) => tab.id === "trade")?.content.title}
+              className="w-full h-auto object-contain rounded-xl animate-image-enter"
             />
           )}
           {activeTab === "positions" && (
             <img
+              key="positions-mobile"
               src="/images/reason/reason-4.png"
-              alt="Positions"
-              className="w-full h-auto object-contain rounded-xl"
+              alt={tabs.find((tab) => tab.id === "positions")?.content.title}
+              className="w-full h-auto object-contain rounded-xl animate-image-enter"
             />
           )}
           {activeTab === "account" && (
             <img
+              key="account-mobile"
               src="/images/reason/reason-5.png"
-              alt="Account"
-              className="w-full h-auto object-contain rounded-xl"
+              alt={tabs.find((tab) => tab.id === "account")?.content.title}
+              className="w-full h-auto object-contain rounded-xl animate-image-enter"
             />
           )}
         </div>

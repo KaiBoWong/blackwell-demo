@@ -11,6 +11,7 @@ import {
 } from "../schemas/auth.schema"
 import { setUser, signIn, signUp } from "../store/user"
 import { showToast } from "../components/toast"
+import { useTranslation } from "@/hooks/useTranslation"
 
 export type AuthMode = "login" | "signup"
 
@@ -45,13 +46,18 @@ export function AuthModal({
   onSwitchMode,
   onAuthSuccess,
 }: Props) {
+  const { t } = useTranslation()
   const isSignup = mode === "signup"
+  const countries = t("contact.countries", {
+    returnObjects: true,
+  }) as unknown as string[]
 
   const {
     register: signupRegister,
     handleSubmit: handleSignupSubmit,
     formState: { errors: signupErrors, isSubmitting: isSignupSubmitting },
     reset: resetSignup,
+    watch: signupWatch,
   } = useForm<SignupFormData>({
     resolver: zodResolver(signupSchema),
     mode: "onChange",
@@ -80,7 +86,9 @@ export function AuthModal({
     },
   })
 
+  const countryValue = signupWatch("country")
   const [loading, setLoading] = useState(false)
+  const fallbackName = t("auth.genericUser")
 
   if (!isOpen) return null
   const isSubmitting = isSignup ? isSignupSubmitting : isLoginSubmitting
@@ -108,29 +116,28 @@ export function AuthModal({
     try {
       if (mode === "signup") {
         const newUser = await signUp(data as SignupFormData)
+        const name =
+          `${newUser.firstName || fallbackName} ${newUser.lastName || ""}`.trim()
         onAuthSuccess(
-          `Hi ${newUser.firstName || "User"} ${
-            newUser.lastName || ""
-          }, welcome to Blackwell, please verify your email immediately.`,
+          t("auth.success.signup", {
+            name,
+          }),
           newUser,
         )
         resetSignup()
       } else {
         const user = await signIn(data as LoginFormData)
-        const fullName = `${user.firstName || "User"} ${
+        const fullName = `${user.firstName || fallbackName} ${
           user.lastName || ""
         }`.trim()
-        onAuthSuccess(
-          `Login successful! Welcome to Blackwell, ${fullName}`,
-          user,
-        )
+        onAuthSuccess(t("auth.success.login", { name: fullName }), user)
         resetLogin()
       }
       onClose()
     } catch (error) {
       console.error("Auth error:", error)
       showToast.error(
-        error instanceof Error ? error.message : "Something went wrong",
+        error instanceof Error ? error.message : t("auth.error.generic"),
       )
     } finally {
       setLoading(false)
@@ -141,13 +148,16 @@ export function AuthModal({
     setLoading(true)
     try {
       const userData = await handleSocialAuth(provider)
-      const fullName = `${userData.firstName || "User"} ${
+      const fullName = `${userData.firstName || fallbackName} ${
         userData.lastName || ""
       }`.trim()
+      const providerName =
+        provider === "google" ? t("auth.google") : t("auth.facebook")
       onAuthSuccess(
-        `${
-          provider === "google" ? "Google" : "Facebook"
-        } login successful! Welcome, ${fullName}`,
+        t("auth.success.social", {
+          provider: providerName,
+          name: fullName,
+        }),
         userData,
       )
       onClose()
@@ -167,8 +177,8 @@ export function AuthModal({
         className="relative w-full max-w-md max-h-[95vh] overflow-y-auto rounded-2xl bg-[#3A53BA] p-6 sm:p-8 shadow-2xl ring-1 ring-[#f2df79]/20 scrollbar-hide"
         onClick={(e) => e.stopPropagation()}
         style={{
-          scrollbarWidth: "none", // Firefox
-          msOverflowStyle: "none", // IE/Edge
+          scrollbarWidth: "none",
+          msOverflowStyle: "none",
         }}
       >
         {/* Glowing effect */}
@@ -177,7 +187,7 @@ export function AuthModal({
         <div className="relative">
           <button
             type="button"
-            aria-label="Close"
+            aria-label={t("common.close")}
             onClick={onClose}
             className="absolute -right-2 -top-2 sm:-right-4 sm:-top-4 flex h-8 w-8 items-center justify-center rounded-full bg-[#040dbf] text-[#f2df79] ring-1 ring-[#f2df79]/30 transition hover:bg-[#F37406] hover:text-white z-10"
           >
@@ -189,15 +199,17 @@ export function AuthModal({
               className="mb-2 text-2xl sm:text-3xl font-bold text-[#f2df79]"
               style={{ fontFamily: "ATRotisSemiSans-ExtraBold, sans-serif" }}
             >
-              {mode === "signup" ? "Create Account" : "Welcome Back"}
+              {mode === "signup"
+                ? t("auth.createAccount")
+                : t("auth.welcomeBack")}
             </h2>
             <p
               className="text-xs sm:text-sm text-[#01f2f2]"
               style={{ fontFamily: "ATRotisSemiSans-Light, sans-serif" }}
             >
               {mode === "signup"
-                ? "Sign up to get started with Blackwell"
-                : "Log in to continue your journey"}
+                ? t("auth.signupSubtitle")
+                : t("auth.loginSubtitle")}
             </p>
           </div>
 
@@ -229,7 +241,7 @@ export function AuthModal({
                       d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
                     />
                   </svg>
-                  <span>Google</span>
+                  <span>{t("auth.google")}</span>
                 </button>
 
                 <button
@@ -245,7 +257,7 @@ export function AuthModal({
                   >
                     <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
                   </svg>
-                  <span>Facebook</span>
+                  <span>{t("auth.facebook")}</span>
                 </button>
               </div>
 
@@ -258,7 +270,7 @@ export function AuthModal({
                     className="bg-[#3A53BA] px-3 sm:px-4 text-[#f2df79]"
                     style={{ fontFamily: "ATRotisSemiSans-Light, sans-serif" }}
                   >
-                    Or continue with email
+                    {t("auth.orEmail")}
                   </span>
                 </div>
               </div>
@@ -280,13 +292,13 @@ export function AuthModal({
                     htmlFor="signup-first-name"
                     className="mb-1 sm:mb-1.5 block text-xs sm:text-sm font-medium text-[#f2df79]"
                   >
-                    First Name
+                    {t("auth.firstName")}
                   </label>
                   <input
                     id="signup-first-name"
                     {...signupRegister("firstName")}
                     className="w-full rounded-lg border border-[#01f2f2]/30 bg-[#040dbf]/30 px-3 sm:px-4 py-2 sm:py-2.5 text-sm text-white placeholder-[#01f2f2]/50 outline-none transition focus:border-[#F37406] focus:ring-2 focus:ring-[#F37406]/20"
-                    placeholder="John"
+                    placeholder={t("auth.placeholder.firstName")}
                   />
                   {signupErrors.firstName && (
                     <p className="mt-1 text-xs text-red-400">
@@ -299,13 +311,13 @@ export function AuthModal({
                     htmlFor="signup-last-name"
                     className="mb-1 sm:mb-1.5 block text-xs sm:text-sm font-medium text-[#f2df79]"
                   >
-                    Last Name
+                    {t("auth.lastName")}
                   </label>
                   <input
                     id="signup-last-name"
                     {...signupRegister("lastName")}
                     className="w-full rounded-lg border border-[#01f2f2]/30 bg-[#040dbf]/30 px-3 sm:px-4 py-2 sm:py-2.5 text-sm text-white placeholder-[#01f2f2]/50 outline-none transition focus:border-[#F37406] focus:ring-2 focus:ring-[#F37406]/20"
-                    placeholder="Doe"
+                    placeholder={t("auth.placeholder.lastName")}
                   />
                   {signupErrors.lastName && (
                     <p className="mt-1 text-xs text-red-400">
@@ -318,14 +330,14 @@ export function AuthModal({
                     htmlFor="signup-mobile"
                     className="mb-1 sm:mb-1.5 block text-xs sm:text-sm font-medium text-[#f2df79]"
                   >
-                    Mobile
+                    {t("auth.mobile")}
                   </label>
                   <input
                     id="signup-mobile"
                     type="tel"
                     {...signupRegister("mobile")}
                     className="w-full rounded-lg border border-[#01f2f2]/30 bg-[#040dbf]/30 px-3 sm:px-4 py-2 sm:py-2.5 text-sm text-white placeholder-[#01f2f2]/50 outline-none transition focus:border-[#F37406] focus:ring-2 focus:ring-[#F37406]/20"
-                    placeholder="+1 (555) 000-0000"
+                    placeholder={t("auth.placeholder.mobile")}
                   />
                   {signupErrors.mobile && (
                     <p className="mt-1 text-xs text-red-400">
@@ -338,14 +350,37 @@ export function AuthModal({
                     htmlFor="signup-country"
                     className="mb-1 sm:mb-1.5 block text-xs sm:text-sm font-medium text-[#f2df79]"
                   >
-                    Country
+                    {t("auth.country")}
                   </label>
-                  <input
-                    id="signup-country"
-                    {...signupRegister("country")}
-                    className="w-full rounded-lg border border-[#01f2f2]/30 bg-[#040dbf]/30 px-3 sm:px-4 py-2 sm:py-2.5 text-sm text-white placeholder-[#01f2f2]/50 outline-none transition focus:border-[#F37406] focus:ring-2 focus:ring-[#F37406]/20"
-                    placeholder="United States"
-                  />
+                  <div className="relative">
+                    <select
+                      id="signup-country"
+                      {...signupRegister("country")}
+                      className="w-full appearance-none rounded-lg border border-[#01f2f2]/30 bg-[#040dbf]/30 px-3 sm:px-4 py-2 sm:py-2.5 text-sm outline-none transition focus:border-[#F37406] focus:ring-2 focus:ring-[#F37406]/20"
+                      style={{
+                        color: countryValue
+                          ? "#ffffff"
+                          : "rgba(255, 255, 255, 0.5)",
+                      }}
+                      defaultValue=""
+                    >
+                      <option value="" className="bg-[#040dbf]" disabled>
+                        {t("auth.placeholder.country")}
+                      </option>
+                      {countries.map((country) => (
+                        <option
+                          key={country}
+                          value={country}
+                          className="bg-[#040dbf] text-white"
+                        >
+                          {country}
+                        </option>
+                      ))}
+                    </select>
+                    <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-white/60">
+                      ▾
+                    </span>
+                  </div>
                   {signupErrors.country && (
                     <p className="mt-1 text-xs text-red-400">
                       {signupErrors.country.message}
@@ -360,7 +395,7 @@ export function AuthModal({
                 htmlFor={`${mode}-email`}
                 className="mb-1 sm:mb-1.5 block text-xs sm:text-sm font-medium text-[#f2df79]"
               >
-                Email
+                {t("auth.email")}
               </label>
               <input
                 type="email"
@@ -370,7 +405,7 @@ export function AuthModal({
                   ? signupRegister("email")
                   : loginRegister("email"))}
                 className="w-full rounded-lg border border-[#01f2f2]/30 bg-[#040dbf]/30 px-3 sm:px-4 py-2 sm:py-2.5 text-sm text-white placeholder-[#01f2f2]/50 outline-none transition focus:border-[#F37406] focus:ring-2 focus:ring-[#F37406]/20"
-                placeholder="you@company.com"
+                placeholder={t("auth.placeholder.email")}
               />
               {(isSignup ? signupErrors.email : loginErrors.email) && (
                 <p className="mt-1 text-xs text-red-400">
@@ -384,7 +419,7 @@ export function AuthModal({
                 htmlFor={`${mode}-password`}
                 className="mb-1 sm:mb-1.5 block text-xs sm:text-sm font-medium text-[#f2df79]"
               >
-                Password
+                {t("auth.password")}
               </label>
               <input
                 type="password"
@@ -396,7 +431,7 @@ export function AuthModal({
                   ? signupRegister("password")
                   : loginRegister("password"))}
                 className="w-full rounded-lg border border-[#01f2f2]/30 bg-[#040dbf]/30 px-3 sm:px-4 py-2 sm:py-2.5 text-sm text-white placeholder-[#01f2f2]/50 outline-none transition focus:border-[#F37406] focus:ring-2 focus:ring-[#F37406]/20"
-                placeholder="••••••••"
+                placeholder={t("auth.placeholder.password")}
               />
               {(isSignup ? signupErrors.password : loginErrors.password) && (
                 <p className="mt-1 text-xs text-red-400">
@@ -414,7 +449,7 @@ export function AuthModal({
                   htmlFor="signup-confirm-password"
                   className="mb-1 sm:mb-1.5 block text-xs sm:text-sm font-medium text-[#f2df79]"
                 >
-                  Confirm Password
+                  {t("auth.confirmPassword")}
                 </label>
                 <input
                   type="password"
@@ -422,7 +457,7 @@ export function AuthModal({
                   autoComplete="new-password"
                   {...signupRegister("confirmPassword")}
                   className="w-full rounded-lg border border-[#01f2f2]/30 bg-[#040dbf]/30 px-3 sm:px-4 py-2 sm:py-2.5 text-sm text-white placeholder-[#01f2f2]/50 outline-none transition focus:border-[#F37406] focus:ring-2 focus:ring-[#F37406]/20"
-                  placeholder="••••••••"
+                  placeholder={t("auth.placeholder.password")}
                 />
                 {signupErrors.confirmPassword && (
                   <p className="mt-1 text-xs text-red-400">
@@ -438,23 +473,25 @@ export function AuthModal({
               className="w-full rounded-lg bg-[#F37406] px-4 py-2.5 sm:py-3 font-semibold text-white shadow-lg transition hover:bg-[#f2df79] hover:text-[#040dbf] hover:shadow-xl hover:shadow-[#F37406]/50 disabled:cursor-not-allowed disabled:opacity-50 active:scale-95"
             >
               {isBusy
-                ? "Processing..."
+                ? t("auth.submit.processing")
                 : mode === "signup"
-                  ? "Register"
-                  : "Login"}
+                  ? t("auth.submit.signup")
+                  : t("auth.submit.login")}
             </button>
           </form>
 
           <p className="mt-4 sm:mt-6 text-center text-xs sm:text-sm text-[#01f2f2]">
             {mode === "signup"
-              ? "Already have an account?"
-              : "Don't have an account?"}{" "}
+              ? t("auth.switch.haveAccount")
+              : t("auth.switch.noAccount")}{" "}
             <button
               type="button"
               onClick={onSwitchMode}
               className="font-semibold text-[#f2df79] transition hover:text-[#F37406] active:scale-95"
             >
-              {mode === "signup" ? "Sign in" : "Sign up"}
+              {mode === "signup"
+                ? t("auth.switch.signIn")
+                : t("auth.switch.signUp")}
             </button>
           </p>
         </div>

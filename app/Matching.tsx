@@ -1,17 +1,41 @@
 "use client"
 
-import PlayStore from "@/components/Store"
-import { useState } from "react"
+import { useTranslation } from "@/hooks/useTranslation"
+import { useEffect, useRef, useState } from "react"
 
 export default function Matching() {
-  const items = [
-    "Spotlight",
-    "Top Strategies",
-    "Low Drawdown",
-    "Medium Drawdown",
-    "High Drawdown",
-    "New Strategies",
-  ]
+  const { t } = useTranslation()
+  const items = t("matching.items", {
+    returnObjects: true,
+  }) as unknown as string[]
+
+  const [isVisible, setIsVisible] = useState(false)
+  const sectionRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setIsVisible(true)
+          }
+        })
+      },
+      {
+        threshold: 0.2, // 当20%的元素可见时触发
+      },
+    )
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current)
+    }
+
+    return () => {
+      if (sectionRef.current) {
+        observer.unobserve(sectionRef.current)
+      }
+    }
+  }, [])
 
   return (
     <div className="mx-auto max-w-[1520px] px-5 lg:px-0">
@@ -20,9 +44,12 @@ export default function Matching() {
           id="matching"
           className="font-title text-3xl font-semibold text-[#01f2f2] sm:text-4xl pb-5 pt-24 lg:pt-24"
         >
-          Fast Matching
+          {t("matching.title")}
         </h2>
-        <div className="relative flex flex-col lg:flex-row items-center justify-center gap-10 lg:gap-10 lg:py-14">
+        <div
+          ref={sectionRef}
+          className="relative flex flex-col lg:flex-row items-center justify-center gap-10 lg:gap-10 lg:py-14"
+        >
           <div className="relative lg:w-80 lg:h-[600px] w-auto h-[350px] bg-black lg:rounded-3xl rounded-xl shadow-2xl flex-shrink-0">
             <video
               autoPlay
@@ -39,7 +66,16 @@ export default function Matching() {
           <div className="max-w-md lg:-mt-28">
             <ul className="lg:space-y-5 space-y-3">
               {items.map((item, index) => (
-                <li key={index} className="flex items-center gap-4">
+                <li
+                  key={index}
+                  className={`flex items-center gap-4 opacity-0 ${
+                    isVisible ? "animate-fade-in-up" : ""
+                  }`}
+                  style={{
+                    animationDelay: isVisible ? `${index * 250}ms` : "0ms",
+                    animationFillMode: "forwards",
+                  }}
+                >
                   <img
                     src="/images/matching/list-icon.png"
                     alt=""

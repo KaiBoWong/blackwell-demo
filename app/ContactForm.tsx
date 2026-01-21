@@ -1,30 +1,41 @@
-import { useState } from "react"
+"use client"
+
+import { showToast } from "@/components/toast"
+import { useForm } from "react-hook-form"
+import { useTranslation } from "@/hooks/useTranslation"
 
 export default function ContactForm() {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    mobile: "",
-    country: "",
-    message: "",
+  const { t } = useTranslation()
+  const countries = t("contact.countries", {
+    returnObjects: true,
+  }) as string[]
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    watch,
+    reset,
+  } = useForm({
+    defaultValues: {
+      name: "",
+      email: "",
+      mobile: "",
+      country: "",
+      message: "",
+    },
   })
 
-  const countries = ["Malaysia", "Vietnam", "Thailand", "Others"]
+  const countryValue = watch("country")
 
-  const handleSubmit = () => {
-    console.log("Form submitted:", formData)
+  const onSubmit = (data: any) => {
+    console.log("Form submitted:", data)
     // Add your form submission logic here
-  }
 
-  const handleChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
-    >,
-  ) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    })
+    // Show success toast
+    showToast.success(t("contact.success"))
+
+    // Reset form
+    reset()
   }
 
   return (
@@ -34,7 +45,7 @@ export default function ContactForm() {
           id="enquire"
           className="font-title text-3xl font-semibold text-[#01f2f2] sm:text-4xl mb-12 pt-24 lg:pt-30"
         >
-          Enquire Now
+          {t("contact.enquire")}
         </h2>
       </div>
 
@@ -45,24 +56,36 @@ export default function ContactForm() {
             <input
               type="text"
               id="name"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
+              {...register("name", {
+                required: t("contact.errors.nameRequired"),
+              })}
               className="w-full rounded-lg border border-white bg-transparent px-4 py-3 text-white placeholder-white/50 outline-none transition focus:border-[#F37406] focus:ring-2 focus:ring-[#F37406]/20"
-              placeholder="Name"
+              placeholder={t("contact.name")}
             />
+            {errors.name && (
+              <p className="mt-1 text-sm text-red-400">{errors.name.message}</p>
+            )}
           </div>
 
           <div>
             <input
               type="email"
               id="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
+              {...register("email", {
+                required: t("contact.errors.emailRequired"),
+                pattern: {
+                  value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                  message: t("contact.errors.emailInvalid"),
+                },
+              })}
               className="w-full rounded-lg border border-white bg-transparent px-4 py-3 text-white placeholder-white/50 outline-none transition focus:border-[#F37406] focus:ring-2 focus:ring-[#F37406]/20"
-              placeholder="Email"
+              placeholder={t("contact.email")}
             />
+            {errors.email && (
+              <p className="mt-1 text-sm text-red-400">
+                {errors.email.message}
+              </p>
+            )}
           </div>
         </div>
 
@@ -72,26 +95,33 @@ export default function ContactForm() {
             <input
               type="tel"
               id="mobile"
-              name="mobile"
-              value={formData.mobile}
-              onChange={handleChange}
+              {...register("mobile", {
+                required: t("contact.errors.mobileRequired"),
+                pattern: {
+                  value: /^[0-9+\-\s()]+$/,
+                  message: t("contact.errors.mobileInvalid"),
+                },
+              })}
               className="w-full rounded-lg border border-white bg-transparent px-4 py-3 text-white placeholder-white/50 outline-none transition focus:border-[#F37406] focus:ring-2 focus:ring-[#F37406]/20"
-              placeholder="Mobile No."
+              placeholder={t("contact.mobile")}
             />
+            {errors.mobile && (
+              <p className="mt-1 text-sm text-red-400">
+                {errors.mobile.message}
+              </p>
+            )}
           </div>
 
           <div>
             <div className="relative">
               <select
                 id="country"
-                name="country"
-                value={formData.country}
-                onChange={handleChange}
+                {...register("country", {
+                  required: t("contact.errors.countryRequired"),
+                })}
                 className="w-full appearance-none rounded-lg border border-white bg-transparent px-4 py-3 pr-10 text-white outline-none transition focus:border-[#F37406] focus:ring-2 focus:ring-[#F37406]/20"
                 style={{
-                  color: formData.country
-                    ? "#ffffff"
-                    : "rgba(255, 255, 255, 0.5)",
+                  color: countryValue ? "#ffffff" : "rgba(255, 255, 255, 0.5)",
                 }}
               >
                 <option
@@ -99,7 +129,7 @@ export default function ContactForm() {
                   className="bg-[#040dbf]"
                   style={{ color: "rgba(255, 255, 255, 0.5)" }}
                 >
-                  Country of Residence
+                  {t("contact.country")}
                 </option>
                 {countries.map((country) => (
                   <option
@@ -114,14 +144,12 @@ export default function ContactForm() {
               <div
                 className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3"
                 style={{
-                  color: formData.country
-                    ? "#ffffff"
-                    : "rgba(255, 255, 255, 0.5)",
+                  color: countryValue ? "#ffffff" : "rgba(255, 255, 255, 0.5)",
                 }}
               >
                 <svg
                   className={`mr-4 h-3 w-3 ${
-                    formData.country ? "text-white" : "text-white/50"
+                    countryValue ? "text-white" : "text-white/50"
                   }`}
                   viewBox="0 0 12 8"
                   fill="none"
@@ -136,30 +164,33 @@ export default function ContactForm() {
                 </svg>
               </div>
             </div>
+            {errors.country && (
+              <p className="mt-1 text-sm text-red-400">
+                {errors.country.message}
+              </p>
+            )}
           </div>
         </div>
 
-        {/* Message */}
+        {/* Message (Optional) */}
         <div>
           <textarea
             id="message"
-            name="message"
-            value={formData.message}
-            onChange={handleChange}
+            {...register("message")}
             rows={6}
             className="w-full rounded-lg font-title border border-white bg-transparent px-4 py-3 text-white placeholder-white/50 outline-none transition focus:border-[#F37406] focus:ring-2 focus:ring-[#F37406]/20 resize-none"
-            placeholder="Enter Your Message"
+            placeholder={t("contact.messageOptional")}
           />
         </div>
 
         {/* Submit Button */}
         <div className="text-center">
           <button
-            type="button"
-            onClick={handleSubmit}
+            type="submit"
+            onClick={handleSubmit(onSubmit)}
             className="rounded-lg bg-[#F37406] px-8 py-3 text-base font-semibold text-white shadow-lg transition hover:bg-[#f2df79] hover:text-[#040dbf] hover:shadow-xl hover:shadow-[#F37406]/50 active:scale-95"
           >
-            Submit
+            {t("contact.submit")}
           </button>
         </div>
       </div>

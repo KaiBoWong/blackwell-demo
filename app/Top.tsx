@@ -1,12 +1,22 @@
 "use client"
 
 import PlayStore from "@/components/Store"
+import { useTranslation } from "@/hooks/useTranslation"
 
 interface HeroSectionProps {
   onRegisterClick: () => void
 }
 
 export default function HeroSection({ onRegisterClick }: HeroSectionProps) {
+  const { t } = useTranslation()
+
+  const tags = [
+    { name: t("hero.tags.forex"), color: "#f2df79" },
+    { name: t("hero.tags.metals"), color: "#F37406" },
+    { name: t("hero.tags.oil"), color: "#D94251" },
+    { name: t("hero.tags.indices"), color: "#01f2f2" },
+  ]
+
   return (
     <div className="min-h-screen relative overflow-visible">
       {/* 桌面端手机图片 - 原始大小 */}
@@ -32,9 +42,11 @@ export default function HeroSection({ onRegisterClick }: HeroSectionProps) {
             <div className="relative flex flex-col items-center mb-8">
               {/* h1 - 在 regular 前面 */}
               <h1 className="text-5xl md:text-8xl font-regular mb-6 flex flex-col gap-2 text-center pt-20 z-10 relative">
-                <span className="font-title text-[#01f2f2]">COPY TRADING</span>
+                <span className="font-title text-[#01f2f2]">
+                  {t("hero.headline1")}
+                </span>
                 <span className="font-title text-3xl md:text-6xl text-white italic">
-                  with Blackwell Invest
+                  {t("hero.headline2")}
                 </span>
               </h1>
 
@@ -71,27 +83,20 @@ export default function HeroSection({ onRegisterClick }: HeroSectionProps) {
             <div className="md:pl-48 pl-4 pb-12">
               <h2 className="text-3xl font-semibold mb-4 text-right">
                 <span className="font-subtitle text-[#01f2f2]">
-                  Choose & Trade
+                  {t("hero.chooseTrade")}
                 </span>
                 <br />
                 <span className="font-subtitle text-[#f2df79] italic">
-                  Ready-To-Go Strategies
+                  {t("hero.readyStrategies")}
                 </span>
               </h2>
 
               <p className="text-white text-base mb-6 text-right">
-                Browse and copy hundreds of investment strategies developed by
-                master traders! Whether you are a pro or beginner, you can now
-                trade quicker and more confidently.
+                {t("hero.description")}
               </p>
 
               <div className="flex flex-wrap gap-3 mb-6 justify-center">
-                {[
-                  { name: "Forex", color: "#f2df79" },
-                  { name: "Precious Metals", color: "#F37406" },
-                  { name: "Oil", color: "#D94251" },
-                  { name: "Indices", color: "#01f2f2" },
-                ].map((item) => (
+                {tags.map((item) => (
                   <span
                     key={item.name}
                     className="px-4 py-2 border-2 text-white rounded-xl text-sm"
@@ -107,12 +112,12 @@ export default function HeroSection({ onRegisterClick }: HeroSectionProps) {
                   onClick={onRegisterClick}
                   className="rounded-lg bg-[#F37406] font-title px-10 py-3 text-lg font-semibold text-white shadow-lg transition hover:bg-[#f2df79] hover:text-[#040dbf] hover:shadow-xl hover:shadow-[#F37406]/50 active:scale-95"
                 >
-                  Register Now
+                  {t("common.registerNow")}
                 </button>
               </div>
 
               <p className="text-white/60 text-xs italic text-right">
-                When you invest, your capital is at risk. Be prudent.
+                {t("hero.disclaimer")}
               </p>
             </div>
           </div>
@@ -120,9 +125,11 @@ export default function HeroSection({ onRegisterClick }: HeroSectionProps) {
           {/* 桌面端内容 */}
           <div className="hidden lg:block">
             <h1 className="text-6xl xl:text-7xl font-regular mb-6 flex flex-col gap-2 text-center">
-              <span className="font-title text-[#01f2f2]">COPY TRADING</span>
+              <span className="font-title text-[#01f2f2]">
+                {t("hero.headline1")}
+              </span>
               <span className="font-title text-4xl xl:text-5xl text-white italic">
-                with Blackwell Invest
+                {t("hero.headline2")}
               </span>
             </h1>
 
@@ -141,27 +148,20 @@ export default function HeroSection({ onRegisterClick }: HeroSectionProps) {
 
             <h2 className="text-2xl lg:text-4xl font-semibold mt-40">
               <span className="font-subtitle text-[#01f2f2]">
-                Choose & Trade
+                {t("hero.chooseTrade")}
               </span>
               <br />
               <span className="font-subtitle text-[#f2df79] italic">
-                Ready-To-Go Strategies
+                {t("hero.readyStrategies")}
               </span>
             </h2>
 
             <p className="text-white text-lg mb-6">
-              Browse and copy hundreds of investment strategies developed by
-              master traders! Whether you are a pro or beginner, you can now
-              trade quicker and more confidently.
+              {t("hero.description")}
             </p>
 
             <div className="flex flex-wrap gap-3 mb-6">
-              {[
-                { name: "Forex", color: "#f2df79" },
-                { name: "Precious Metals", color: "#F37406" },
-                { name: "Oil", color: "#D94251" },
-                { name: "Indices", color: "#01f2f2" },
-              ].map((item) => (
+              {tags.map((item) => (
                 <span
                   key={item.name}
                   className="px-4 py-2 border-2 text-white rounded-xl text-sm"
@@ -177,12 +177,12 @@ export default function HeroSection({ onRegisterClick }: HeroSectionProps) {
                 onClick={onRegisterClick}
                 className="rounded-lg bg-[#F37406] font-title px-10 py-3 text-lg font-semibold text-white shadow-lg transition hover:bg-[#f2df79] hover:text-[#040dbf] hover:shadow-xl hover:shadow-[#F37406]/50 active:scale-95"
               >
-                Register Now
+                {t("common.registerNow")}
               </button>
             </div>
 
             <p className="text-white/60 text-sm italic pt-5">
-              When you invest, your capital is at risk. Be prudent.
+              {t("hero.disclaimer")}
             </p>
           </div>
         </div>
