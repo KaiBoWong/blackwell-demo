@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 })
 
 export const metadata: Metadata = {
-  title: "Blackwell Auth | Adaptive access",
+  title: "Blackwell Global | Adaptive access",
   description:
     "Adaptive authentication with risk-aware flows and zero-downtime upgrades.",
 }

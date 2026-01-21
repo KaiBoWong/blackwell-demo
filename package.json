@@ -1,5 +1,5 @@
 {
-  "name": "blackwell-auth",
+  "name": "blackwell-global",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
+    "firebase": "^12.8.0",
     "i18n-js": "^4.5.1",
     "next": "16.1.2",
     "react": "19.2.3",
