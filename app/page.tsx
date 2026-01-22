@@ -260,7 +260,7 @@ export default function Page() {
                 <option
                   key={lang.code}
                   value={lang.code}
-                  className="bg-[#1a2f52] text-[#0b2a63]"
+                  className="bg-[#1a2f52] text-white"
                 >
                   {lang.label}
                 </option>
