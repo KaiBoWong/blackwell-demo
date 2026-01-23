@@ -191,7 +191,7 @@ export default function Page() {
             />
           </Link>
 
-          <div className="hidden lg:flex flex flex-col text-center xl:ml-30 lg:ml-10 mb-3">
+          <div className="hidden lg:flex flex flex-col text-center xl:ml-30 lg:ml-4 mb-3">
             <span className="text-[12px] font-subtitle uppercase text-white">
               {t("header.promotion")}
             </span>
@@ -200,7 +200,7 @@ export default function Page() {
             </span>
           </div>
 
-          <div className="hidden items-center gap-x-2 lg:flex xl:ml-30 lg:ml-15">
+          <div className="hidden items-center gap-x-2 lg:flex xl:ml-30 lg:ml-4">
             <div className="flex items-center gap-2">
               {/* Days */}
               <div className="text-center">
