@@ -64,7 +64,7 @@ export default function HeroSection({ onRegisterClick }: HeroSectionProps) {
             </div>
 
             {/* 移动端手机图片 */}
-            <div className="relative w-full min-h-[80vh]">
+            <div className="relative w-full min-h-[800px]">
               <img
                 src="/images/top/hand.png"
                 alt="Phone"
@@ -80,7 +80,7 @@ export default function HeroSection({ onRegisterClick }: HeroSectionProps) {
             </div>
 
             {/* 移动端文字内容 */}
-            <div className="md:pl-48 pl-4 pb-12">
+            <div className="md:pl-60 pl-4 pb-12">
               <h2 className="text-3xl font-semibold mb-4 text-right">
                 <span className="font-subtitle text-[#01f2f2]">
                   {t("hero.chooseTrade")}
@@ -156,9 +156,7 @@ export default function HeroSection({ onRegisterClick }: HeroSectionProps) {
               </span>
             </h2>
 
-            <p className="text-white text-lg mb-6">
-              {t("hero.description")}
-            </p>
+            <p className="text-white text-lg mb-6">{t("hero.description")}</p>
 
             <div className="flex flex-wrap gap-3 mb-6">
               {tags.map((item) => (
